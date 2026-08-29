@@ -1,0 +1,104 @@
+<Window x:Class="Yaromir_Firewall_FINAL1.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Yaromir Firewall" Height="400" Width="500"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="CanMinimize">
+
+    <Window.Resources>
+        <!-- Стиль для квадратной кнопки "i" (такого же размера как тема/язык) -->
+        <Style x:Key="InfoButtonStyle" TargetType="Button">
+            <Setter Property="Width" Value="40"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="{DynamicResource ForegroundBrush}"/>
+            <Setter Property="Background" Value="{DynamicResource ButtonBackground}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Padding" Value="0"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="{DynamicResource ButtonHover}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Темы -->
+        <ResourceDictionary x:Key="LightTheme">
+            <SolidColorBrush x:Key="BackgroundBrush" Color="#F5F5F5"/>
+            <SolidColorBrush x:Key="ForegroundBrush" Color="#1E1E1E"/>
+            <SolidColorBrush x:Key="ButtonBackground" Color="#E0E0E0"/>
+            <SolidColorBrush x:Key="ButtonHover" Color="#CCCCCC"/>
+            <SolidColorBrush x:Key="BorderBrush" Color="#BBBBBB"/>
+            <SolidColorBrush x:Key="StatusBrush" Color="#666666"/>
+        </ResourceDictionary>
+
+        <ResourceDictionary x:Key="DarkTheme">
+            <SolidColorBrush x:Key="BackgroundBrush" Color="#1E1E1E"/>
+            <SolidColorBrush x:Key="ForegroundBrush" Color="#F5F5F5"/>
+            <SolidColorBrush x:Key="ButtonBackground" Color="#3A3A3A"/>
+            <SolidColorBrush x:Key="ButtonHover" Color="#4A4A4A"/>
+            <SolidColorBrush x:Key="BorderBrush" Color="#555555"/>
+            <SolidColorBrush x:Key="StatusBrush" Color="#AAAAAA"/>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Верхняя панель -->
+        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Left">
+            <Button x:Name="ThemeButton" Width="40" Height="40" FontSize="20" Padding="0" 
+                    ToolTip="Светлая тема" Click="ThemeButton_Click">☀️</Button>
+            <Button x:Name="LangButton" Width="40" Height="40" FontSize="20" Padding="0" 
+                    ToolTip="Русский" Click="LangButton_Click">🇷🇺</Button>
+            
+            <!-- Кнопка "i" (квадратная, 40x40, в том же ряду) -->
+            <Button x:Name="AboutButton" 
+                    Style="{StaticResource InfoButtonStyle}"
+                    Content="i"
+                    ToolTip="О программе"
+                    Click="OpenAbout_Click"
+                    Margin="5,0,0,0"/>
+        </StackPanel>
+
+        <Button x:Name="MinimizeButton" Grid.Row="0" HorizontalAlignment="Right" Width="80" Height="30" 
+                Click="MinimizeToTray_Click" FontSize="12">ТРЕЙ</Button>
+
+        <!-- Центр -->
+        <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <!-- Иконка (110x110, без обрезки) -->
+            <Image x:Name="AppIcon" 
+                   Source="Resources/icon.ico" 
+                   Stretch="Uniform"
+                   Width="110" 
+                   Height="110" 
+                   HorizontalAlignment="Center" 
+                   Margin="0,0,0,20"/>
+            
+            <Button x:Name="OpenMonitorButton" Content="Открыть мониторинг" Width="200" Height="40" FontSize="16"
+                    Click="OpenMonitor_Click"/>
+            <Button x:Name="WhiteListButton" Content="Белый список" Width="200" Height="35" FontSize="14"
+                    Click="OpenWhiteList_Click"/>
+            <Button x:Name="BlackListButton" Content="Чёрный список" Width="200" Height="35" FontSize="14"
+                    Click="OpenBlackList_Click"/>
+        </StackPanel>
+
+        <!-- Статус -->
+        <TextBlock Grid.Row="2" Text="Активно правил: 0" 
+                   Foreground="{DynamicResource StatusBrush}" 
+                   HorizontalAlignment="Center" FontSize="12" Margin="0,5" x:Name="StatusText"/>
+
+        <!-- Лицензионное уведомление -->
+        <TextBlock Grid.Row="3" Text="© 2026 Яромир. Лицензия Apache 2.0." 
+                   Foreground="Gray" HorizontalAlignment="Center" 
+                   FontSize="9" Margin="0,5,0,0"/>
+    </Grid>
+</Window>
