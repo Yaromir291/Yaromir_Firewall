@@ -1,28 +1,35 @@
+```
 # Build artifacts
-bin/
-obj/
+*.obj
 *.exe
 *.dll
-*.pdb
-*.userprefs
-*.cache
-*.suo
-*.user
-*.aps
-*.ncb
-*.ilk
-*.iobj
-*.ipdb
-*.tlog
-*.exp
+*.so
+*.a
 *.lib
+*.pdb
+*.ilk
+*.exp
 *.manifest
-*.res
+*.cache
+*.nupkg
+*.snk
+*.config
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.userprefs
 
-# Dependencies
+# Dependency directories
 packages/
-node_modules/
-bower_components/
+bin/
+obj/
+Debug/
+Release/
+x64/
+x86/
+build/
+dist/
 
 # Logs
 *.log
@@ -32,48 +39,10 @@ bower_components/
 .env.local
 *.env.*
 
-# OS generated files
-.DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
-Thumbs.db
-
-# Visual Studio
-*.VC.db
-*.VC.VC.opendb
-*.userosscache
-*.sln.docstates
-[ip].metagen
-
-# Visual Studio Code
+# Editors
 .vscode/
-
-# Resharper
-_ReSharper*/
-*.[Rr]e[Ss]harper
-*.DotSettings.user
-*.userprefs
-
-# Build results
-[Dd]ebug/
-[Dd]ebugPublic/
-[Rr]elease/
-[Rr]eleases/
-x64/
-x86/
-build/
-bld/
-[Bb]in/
-[Oo]bj/
-
-# User-specific files
-*.user
-*.suo
-*.useroscache
-*.sln.docstates
-
-# IDE - VSCode
-.vscode/*
+.idea/
+*.swp
+*.swo
+*~
+```
