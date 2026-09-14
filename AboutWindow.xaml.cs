@@ -13,5 +13,12 @@ namespace Yaromir_Firewall_FINAL1
         {
             Close();
         }
+
+        public void UpdateLanguageFromService()
+        {
+            var lang = LanguageService.Instance.CurrentLanguage;
+            
+            Title = LanguageService.Instance.GetResource("AboutWindowTitle", lang);
+        }
     }
 }

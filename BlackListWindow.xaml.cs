@@ -63,5 +63,12 @@ namespace Yaromir_Firewall_FINAL1
                 FirewallService.Instance.RemoveAllBlockRules();
             }
         }
+
+        public void UpdateLanguageFromService()
+        {
+            var lang = LanguageService.Instance.CurrentLanguage;
+            
+            Title = LanguageService.Instance.GetResource("BlackListWindowTitle", lang);
+        }
     }
 }

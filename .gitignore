@@ -3,46 +3,49 @@
 *.obj
 *.exe
 *.dll
-*.so
-*.a
-*.lib
 *.pdb
-*.ilk
-*.exp
-*.manifest
-*.cache
-*.nupkg
-*.snk
-*.config
-*.user
-*.suo
-*.userosscache
-*.sln.docstates
 *.userprefs
+*.cache
+*.compiled
+*.bak
+*.tmp
+*.log
 
-# Dependency directories
+# Dependencies
 packages/
 bin/
 obj/
 Debug/
 Release/
-x64/
-x86/
-build/
-dist/
+.vs/
+.vscode/
+.idea/
 
-# Logs
-*.log
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Windows files
+Thumbs.db
+ehthumbs.db
+Icon?
+desktop.ini
+
+# macOS files
+.DS_Store
 
 # Environment
 .env
 .env.local
 *.env.*
 
-# Editors
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
+# Coverage
+coverage/
+*.coverage
+htmlcov/
+
+# Logs
+*.log
 ```
