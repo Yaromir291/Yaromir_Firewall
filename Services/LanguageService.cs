@@ -20,6 +20,21 @@ namespace Yaromir_Firewall_FINAL1
             }
         }
 
+        // Публичное свойство для доступа к текущему языку
+        public string CurrentLanguage => _isRussian ? "ru" : "en";
+
+        // Публичный метод для получения ресурса по ключу
+        public string GetResource(string key)
+        {
+            return Get(key);
+        }
+
+        // Публичный метод для получения ресурса с параметрами форматирования
+        public string GetResource(string key, params object[] args)
+        {
+            return Get(key, args);
+        }
+
         private readonly Dictionary<string, string> _russianStrings = new Dictionary<string, string>
         {
             // MainWindow
