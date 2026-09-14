@@ -85,6 +85,7 @@
     <Compile Include="Services\FirewallService.cs" />
     <Compile Include="Services\NetworkMonitor.cs" />
     <Compile Include="Services\SettingsManager.cs" />
+    <Compile Include="Services\LanguageService.cs" />
     <Compile Include="Models\ConnectionInfo.cs" />
   </ItemGroup>
 
