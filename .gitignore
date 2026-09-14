@@ -1,1 +1,49 @@
-Nothing should be ignored based on the provided file changes, as they consist only of source code files (.cs, .xaml.cs) without any build artifacts, dependencies, or temporary files that would warrant adding to .gitignore.
+```
+# Build artifacts
+*.obj
+*.exe
+*.dll
+*.so
+*.a
+*.lib
+*.pdb
+*.ilk
+*.exp
+*.sys
+*.com
+*.bat
+*.sh
+*.bin
+*.out
+
+# Dependencies
+packages/
+bin/
+obj/
+Debug/
+Release/
+x64/
+x86/
+build/
+dist/
+
+# Logs
+*.log
+
+# Environment
+.env
+.env.local
+*.env.*
+
+# Editors
+.vs/
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+```
