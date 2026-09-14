@@ -7,7 +7,6 @@ namespace Yaromir_Firewall_FINAL1
     public partial class MainWindow : Window
     {
         private int _themeState = 2;
-        private bool _isRussian = true;
         private DispatcherTimer? _statusTimer;
 
         public MainWindow()
@@ -15,7 +14,7 @@ namespace Yaromir_Firewall_FINAL1
             InitializeComponent();
 
             ApplyTheme(2);
-            UpdateLanguage();
+            UpdateLanguageFromService();
 
             _statusTimer = new DispatcherTimer();
             _statusTimer.Interval = TimeSpan.FromSeconds(5);
@@ -40,17 +39,25 @@ namespace Yaromir_Firewall_FINAL1
                 {
                     case 0: themeName = "LightTheme"; iconText = "☀️"; break;
                     case 1: themeName = "DarkTheme"; iconText = "🌙"; break;
-                    default:
-                        themeName = SystemThemeHelper.GetSystemTheme() ? "LightTheme" : "DarkTheme";
-                        iconText = "🖥"; break;
+                    case 2: 
+                        bool isLight = SystemThemeHelper.GetSystemTheme();
+                        themeName = isLight ? "LightTheme" : "DarkTheme";
+                        iconText = "🖥"; 
+                        break;
+                    default: themeName = "LightTheme"; iconText = "☀️"; break;
                 }
 
-                if (this.Resources[themeName] is ResourceDictionary themeDict)
+                // Получаем словарь темы из ресурсов окна
+                ResourceDictionary? themeDict = null;
+                if (this.Resources[themeName] is ResourceDictionary)
+                {
+                    themeDict = this.Resources[themeName] as ResourceDictionary;
+                }
+
+                if (themeDict != null)
                 {
                     Application.Current.Resources.MergedDictionaries.Clear();
                     Application.Current.Resources.MergedDictionaries.Add(themeDict);
-
-                    this.Background = (System.Windows.Media.Brush)Application.Current.Resources["BackgroundBrush"];
                 }
 
                 ThemeButton.Content = iconText;
@@ -63,19 +70,26 @@ namespace Yaromir_Firewall_FINAL1
 
         private void LangButton_Click(object sender, RoutedEventArgs e)
         {
-            _isRussian = !_isRussian;
-            UpdateLanguage();
+            LanguageService.Instance.IsRussian = !LanguageService.Instance.IsRussian;
+            SettingsManager.Instance.IsRussian = LanguageService.Instance.IsRussian;
+            SettingsManager.Instance.Save();
         }
 
-        private void UpdateLanguage()
+        public void UpdateLanguageFromService()
         {
-            LangButton.Content = _isRussian ? "🇷🇺" : "🇬🇧";
-            LangButton.ToolTip = _isRussian ? "Русский" : "English";
+            bool isRussian = LanguageService.Instance.IsRussian;
 
-            OpenMonitorButton.Content = _isRussian ? "Открыть мониторинг" : "Open Monitor";
-            WhiteListButton.Content = _isRussian ? "Белый список" : "Whitelist";
-            BlackListButton.Content = _isRussian ? "Чёрный список" : "Blacklist";
-            MinimizeButton.Content = _isRussian ? "ТРЕЙ" : "TRAY";
+            LangButton.Content = isRussian ? "🇷🇺" : "🇬🇧";
+            LangButton.ToolTip = LanguageService.Instance.Get(isRussian ? "MainWindow_LangButton_ToolTip_RU" : "MainWindow_LangButton_ToolTip_EN");
+            ThemeButton.ToolTip = LanguageService.Instance.Get("MainWindow_ThemeButton_ToolTip");
+            AboutButton.ToolTip = LanguageService.Instance.Get("MainWindow_AboutButton_ToolTip");
+
+            OpenMonitorButton.Content = LanguageService.Instance.Get("MainWindow_OpenMonitorButton");
+            WhiteListButton.Content = LanguageService.Instance.Get("MainWindow_WhiteListButton");
+            BlackListButton.Content = LanguageService.Instance.Get("MainWindow_BlackListButton");
+            MinimizeButton.Content = LanguageService.Instance.Get("MainWindow_MinimizeButton");
+
+            Title = LanguageService.Instance.Get("MainWindow_Title");
 
             UpdateStatus();
         }
@@ -88,11 +102,11 @@ namespace Yaromir_Firewall_FINAL1
                 int whiteListCount = SettingsManager.Instance.WhiteList.Count;
                 int total = blockRules + whiteListCount;
 
-                StatusText.Text = _isRussian ? $"Активно правил: {total}" : $"Active rules: {total}";
+                StatusText.Text = LanguageService.Instance.Get("MainWindow_StatusText", total);
             }
             catch
             {
-                StatusText.Text = _isRussian ? "Активно правил: 0" : "Active rules: 0";
+                StatusText.Text = LanguageService.Instance.Get("MainWindow_StatusText", 0);
             }
         }
 
