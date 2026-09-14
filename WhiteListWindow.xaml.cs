@@ -60,5 +60,12 @@ namespace Yaromir_Firewall_FINAL1
                 RefreshList();
             }
         }
+
+        public void UpdateLanguageFromService()
+        {
+            var lang = LanguageService.Instance.CurrentLanguage;
+            
+            Title = LanguageService.Instance.GetResource("WhiteListWindowTitle", lang);
+        }
     }
 }

@@ -69,6 +69,7 @@ namespace Yaromir_Firewall_FINAL1
 
         private void UpdateLanguage()
         {
+            _isRussian = !_isRussian;
             LangButton.Content = _isRussian ? "🇷🇺" : "🇬🇧";
             LangButton.ToolTip = _isRussian ? "Русский" : "English";
 
@@ -76,6 +77,21 @@ namespace Yaromir_Firewall_FINAL1
             WhiteListButton.Content = _isRussian ? "Белый список" : "Whitelist";
             BlackListButton.Content = _isRussian ? "Чёрный список" : "Blacklist";
             MinimizeButton.Content = _isRussian ? "ТРЕЙ" : "TRAY";
+
+            UpdateStatus();
+        }
+
+        public void UpdateLanguageFromService()
+        {
+            var lang = LanguageService.Instance.CurrentLanguage;
+            
+            LangButton.Content = lang == "ru" ? "🇷🇺" : "🇬🇧";
+            LangButton.ToolTip = lang == "ru" ? "Русский" : "English";
+
+            OpenMonitorButton.Content = LanguageService.Instance.GetResource("OpenMonitorButton", lang);
+            WhiteListButton.Content = LanguageService.Instance.GetResource("WhiteListButton", lang);
+            BlackListButton.Content = LanguageService.Instance.GetResource("BlackListButton", lang);
+            MinimizeButton.Content = LanguageService.Instance.GetResource("MinimizeButton", lang);
 
             UpdateStatus();
         }
