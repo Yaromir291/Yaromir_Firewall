@@ -87,6 +87,7 @@
     <Compile Include="Services\SettingsManager.cs" />
     <Compile Include="Services\LanguageService.cs" />
     <Compile Include="Models\ConnectionInfo.cs" />
+    <Compile Include="AssemblyInfo.cs" />
   </ItemGroup>
 
 </Project>
