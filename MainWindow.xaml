@@ -25,7 +25,7 @@
             </Style.Triggers>
         </Style>
 
-        <!-- Темы -->
+        <!-- Темы (цветовые схемы для Light/Dark/System) -->
         <ResourceDictionary x:Key="LightTheme">
             <SolidColorBrush x:Key="BackgroundBrush" Color="#F5F5F5"/>
             <SolidColorBrush x:Key="ForegroundBrush" Color="#1E1E1E"/>

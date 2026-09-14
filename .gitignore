@@ -1,1 +1,79 @@
-Nothing should be ignored based on the provided file changes. The only modified file is 'PromptWindow.xaml.cs', which appears to be a source code file (.cs extension) and should not be added to .gitignore. Since there are no build artifacts, dependencies, or temporary files in the changes, no additional ignore rules are needed.
+# Build artifacts
+bin/
+obj/
+*.exe
+*.dll
+*.pdb
+*.userprefs
+*.cache
+*.suo
+*.user
+*.aps
+*.ncb
+*.ilk
+*.iobj
+*.ipdb
+*.tlog
+*.exp
+*.lib
+*.manifest
+*.res
+
+# Dependencies
+packages/
+node_modules/
+bower_components/
+
+# Logs
+*.log
+
+# Environment
+.env
+.env.local
+*.env.*
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Visual Studio
+*.VC.db
+*.VC.VC.opendb
+*.userosscache
+*.sln.docstates
+[ip].metagen
+
+# Visual Studio Code
+.vscode/
+
+# Resharper
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+*.userprefs
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+build/
+bld/
+[Bb]in/
+[Oo]bj/
+
+# User-specific files
+*.user
+*.suo
+*.useroscache
+*.sln.docstates
+
+# IDE - VSCode
+.vscode/*

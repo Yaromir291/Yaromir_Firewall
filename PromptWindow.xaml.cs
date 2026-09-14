@@ -33,10 +33,10 @@ namespace Yaromir_Firewall_FINAL1
         {
             var lang = LanguageService.Instance;
             Title = lang.Get("PromptWindow_Title");
-            ((Button)((Grid)Content).Children[2]).Content = lang.Get("PromptWindow_AllowButton");
-            ((Button)((Grid)Content).Children[3]).Content = lang.Get("PromptWindow_BlockButton");
-            ((Button)((Grid)Content).Children[4]).Content = lang.Get("PromptWindow_BlockAndKillButton");
-            ((CheckBox)((Grid)Content).Children[5]).Content = lang.Get("PromptWindow_OnceCheckBox");
+            AllowButton.Content = lang.Get("PromptWindow_AllowButton");
+            BlockButton.Content = lang.Get("PromptWindow_BlockButton");
+            BlockAndKillButton.Content = lang.Get("PromptWindow_BlockAndKillButton");
+            OnceCheckBox.Content = lang.Get("PromptWindow_OnceCheckBox");
             
             // Обновляем текст цели, если он уже установлен
             if (!string.IsNullOrEmpty(TargetInfo.Text) && TargetInfo.Text.Contains(":"))

@@ -26,6 +26,11 @@ namespace Yaromir_Firewall_FINAL1
         /// </summary>
         public bool HadVersion1_0 { get; set; } = false;
 
+        /// <summary>
+        /// Индекс темы: 0=Light, 1=Dark, 2=System, 3=Gold, 4=Neon
+        /// </summary>
+        public int ThemeIndex { get; set; } = 2;
+
         public void Load()
         {
             if (File.Exists(_settingsPath))
@@ -43,6 +48,7 @@ namespace Yaromir_Firewall_FINAL1
                         RefreshRate = data.RefreshRate;
                         HadVersion1_0 = data.HadVersion1_0;
                         BlockedPorts = data.BlockedPorts ?? new List<int>();
+                        ThemeIndex = data.ThemeIndex;
                     }
                 }
                 catch { }
