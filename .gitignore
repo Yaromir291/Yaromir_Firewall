@@ -1,0 +1,1 @@
+Nothing should be ignored based on the provided file changes, as they consist only of source code files (.cs, .xaml.cs) without any build artifacts, dependencies, or temporary files that would warrant adding to .gitignore.
