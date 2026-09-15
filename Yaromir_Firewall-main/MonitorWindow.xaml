@@ -1,0 +1,38 @@
+<Window x:Class="Yaromir_Firewall_FINAL1.MonitorWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Мониторинг" Height="500" Width="800"
+        WindowStartupLocation="CenterScreen"
+        Background="{DynamicResource BackgroundBrush}"
+        Foreground="{DynamicResource ForegroundBrush}">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Button Grid.Row="0" Content="←" Width="40" Height="30" FontSize="18"
+                HorizontalAlignment="Left" Click="Back_Click" ToolTip="Назад"/>
+        <DataGrid x:Name="ConnectionsGrid" Grid.Row="1" Margin="0,10,0,10"
+                  AutoGenerateColumns="False" 
+                  Background="{DynamicResource BackgroundBrush}"
+                  Foreground="{DynamicResource ForegroundBrush}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Имя" Binding="{Binding ProcessName}" Width="150"/>
+                <DataGridTextColumn Header="PID" Binding="{Binding Pid}" Width="60"/>
+                <DataGridTextColumn Header="Локальный порт" Binding="{Binding LocalPort}" Width="100"/>
+                <DataGridTextColumn Header="Удалённый IP:порт" Binding="{Binding RemoteAddress}" Width="200"/>
+                <DataGridTextColumn Header="Протокол" Binding="{Binding Protocol}" Width="80"/>
+                <DataGridTextColumn Header="Статус" Binding="{Binding Status}" Width="120"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
+            <TextBlock Text="Частота обновления:" VerticalAlignment="Center" Margin="0,0,10,0"/>
+            <ComboBox x:Name="RefreshRateCombo" Width="120" SelectionChanged="RefreshRate_Changed">
+                <ComboBoxItem Content="Быстро (1 сек)" Tag="1"/>
+                <ComboBoxItem Content="Умеренно (5 сек)" Tag="5" IsSelected="True"/>
+                <ComboBoxItem Content="Медленно (10 сек)" Tag="10"/>
+            </ComboBox>
+        </StackPanel>
+    </Grid>
+</Window>

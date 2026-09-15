@@ -1,0 +1,29 @@
+<Window x:Class="Yaromir_Firewall_FINAL1.PromptWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Новое подключение" Height="280" Width="450"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="ToolWindow"
+        Background="{DynamicResource BackgroundBrush}"
+        Foreground="{DynamicResource ForegroundBrush}"
+        ResizeMode="NoResize">
+    <Grid Margin="15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <TextBlock x:Name="ProgramName" FontSize="18" FontWeight="Bold" Text="program.exe" Grid.Row="0"/>
+        <TextBlock x:Name="ProgramPath" FontSize="12" Foreground="Gray" Text="C:\path\to\program.exe" Grid.Row="1" Margin="0,0,0,10"/>
+        <TextBlock x:Name="TargetInfo" FontSize="13" Text="Цель: 192.168.1.1:443" Grid.Row="2" Margin="0,0,0,15"/>
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,10">
+            <Button Content="Разрешить" Width="90" Margin="5" Click="Allow_Click" Background="#4CAF50" Foreground="White"/>
+            <Button Content="Запретить" Width="90" Margin="5" Click="Block_Click" Background="#F44336" Foreground="White"/>
+            <Button Content="Запретить и завершить" Width="130" Margin="5" Click="BlockAndKill_Click" Background="#D32F2F" Foreground="White"/>
+        </StackPanel>
+        <CheckBox x:Name="OnceCheckBox" Grid.Row="4" Content="Только в этот раз" IsChecked="True" Margin="0,0,0,5" HorizontalAlignment="Center"/>
+    </Grid>
+</Window>
