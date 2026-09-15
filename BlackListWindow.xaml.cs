@@ -34,6 +34,13 @@ namespace Yaromir_Firewall_FINAL1
 
                 if (!_settings.BlackList.Contains(name))
                 {
+                    // 🔥 КЛЮЧЕВОЕ ИСПРАВЛЕНИЕ: если программа была в белом списке — убираем оттуда
+                    if (_settings.WhiteList.Contains(name))
+                    {
+                        _settings.WhiteList.Remove(name);
+                        _settings.Save();
+                    }
+
                     FirewallService.Instance.BlockProgram(name, killRunning: true);
                     RefreshList();
                 }
@@ -45,10 +52,11 @@ namespace Yaromir_Firewall_FINAL1
             if (ItemsList.SelectedItem != null)
             {
                 var name = ItemsList.SelectedItem.ToString();
-                _settings.BlackList.Remove(name);
-                _settings.Save();
+                
+                // 🔥 КЛЮЧЕВОЕ ИСПРАВЛЕНИЕ: полностью разблокируем с убийством процесса
+                FirewallService.Instance.UnblockProgram(name, killRunning: true);
+                
                 RefreshList();
-                FirewallService.Instance.RemoveBlockRule(name);
             }
         }
 
@@ -57,18 +65,17 @@ namespace Yaromir_Firewall_FINAL1
             if (MessageBox.Show("Очистить весь чёрный список?", "Подтверждение",
                 MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
             {
+                // 🔥 КЛЮЧЕВОЕ ИСПРАВЛЕНИЕ: разблокируем каждую программу перед очисткой
+                var toClear = new System.Collections.Generic.List<string>(_settings.BlackList);
+                foreach (var name in toClear)
+                {
+                    FirewallService.Instance.UnblockProgram(name, killRunning: true);
+                }
+                
                 _settings.BlackList.Clear();
                 _settings.Save();
                 RefreshList();
-                FirewallService.Instance.RemoveAllBlockRules();
             }
-        }
-
-        public void UpdateLanguageFromService()
-        {
-            var lang = LanguageService.Instance.CurrentLanguage;
-            
-            Title = LanguageService.Instance.GetResource("BlackListWindowTitle", lang);
         }
     }
 }

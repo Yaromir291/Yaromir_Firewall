@@ -32,6 +32,12 @@ namespace Yaromir_Firewall_FINAL1
                 var name = System.IO.Path.GetFileName(dialog.FileName);
                 if (!_settings.WhiteList.Contains(name))
                 {
+                    // 🔥 КЛЮЧЕВОЕ ИСПРАВЛЕНИЕ: если программа была в чёрном списке — разблокируем
+                    if (_settings.BlackList.Contains(name))
+                    {
+                        FirewallService.Instance.UnblockProgram(name, killRunning: false);
+                    }
+
                     _settings.WhiteList.Add(name);
                     _settings.Save();
                     RefreshList();
@@ -59,13 +65,6 @@ namespace Yaromir_Firewall_FINAL1
                 _settings.Save();
                 RefreshList();
             }
-        }
-
-        public void UpdateLanguageFromService()
-        {
-            var lang = LanguageService.Instance.CurrentLanguage;
-            
-            Title = LanguageService.Instance.GetResource("WhiteListWindowTitle", lang);
         }
     }
 }
