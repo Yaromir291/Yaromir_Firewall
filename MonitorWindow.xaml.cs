@@ -31,7 +31,7 @@ namespace Yaromir_Firewall_FINAL1
             var lang = LanguageService.Instance;
             this.Title = lang.GetResource("MonitorWindow_Title");
             BackButton.ToolTip = lang.GetResource("MonitorWindow_BackButton_ToolTip");
-            RefreshRateLabel.Content = lang.GetResource("MonitorWindow_RefreshRateLabel");
+            RefreshRateLabel.Text = lang.GetResource("MonitorWindow_RefreshRateLabel");
             
             // Обновление заголовков колонок
             if (ConnectionsGrid.Columns.Count >= 5)
