@@ -29,9 +29,9 @@
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
             <TextBlock x:Name="RefreshRateLabel" Text="Частота обновления:" VerticalAlignment="Center" Margin="0,0,10,0"/>
             <ComboBox x:Name="RefreshRateCombo" Width="120" SelectionChanged="RefreshRate_Changed">
-                <ComboBoxItem Content="Быстро (1 сек)" Tag="1"/>
-                <ComboBoxItem Content="Умеренно (5 сек)" Tag="5" IsSelected="True"/>
-                <ComboBoxItem Content="Медленно (10 сек)" Tag="10"/>
+                <ComboBoxItem x:Name="FastOption" Content="Быстро (1 сек)" Tag="1"/>
+                <ComboBoxItem x:Name="ModerateOption" Content="Умеренно (5 сек)" Tag="5" IsSelected="True"/>
+                <ComboBoxItem x:Name="SlowOption" Content="Медленно (10 сек)" Tag="10"/>
             </ComboBox>
         </StackPanel>
     </Grid>
