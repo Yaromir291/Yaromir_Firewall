@@ -100,21 +100,14 @@ namespace Yaromir_Firewall_FINAL1
 
         private void UpdateLanguage()
         {
-            var lang = LanguageService.Instance;
-            
             LangButton.Content = _isRussian ? "🇷🇺" : "🇬🇧";
-            LangButton.ToolTip = lang.GetResource(_isRussian ? "MainWindow_LangButton_ToolTip_RU" : "MainWindow_LangButton_ToolTip_EN");
+            LangButton.ToolTip = _isRussian ? "Русский" : "English";
 
-            OpenMonitorButton.Content = lang.GetResource("MainWindow_OpenMonitorButton");
-            WhiteListButton.Content = lang.GetResource("MainWindow_WhiteListButton");
-            BlackListButton.Content = lang.GetResource("MainWindow_BlackListButton");
+            OpenMonitorButton.Content = _isRussian ? "Открыть мониторинг" : "Open Monitor";
+            WhiteListButton.Content = _isRussian ? "Белый список" : "Whitelist";
+            BlackListButton.Content = _isRussian ? "Чёрный список" : "Blacklist";
 
-            ThemeButton.ToolTip = lang.GetResource("MainWindow_ThemeButton_ToolTip");
-            AboutButton.ToolTip = lang.GetResource("MainWindow_AboutButton_ToolTip");
-            MinimizeButton.Content = lang.GetResource("MainWindow_MinimizeButton");
-            
             UpdateStatus();
-            LicenseText.Text = lang.GetResource("MainWindow_LicenseText");
         }
 
         public void UpdateLanguageFromService()
