@@ -150,6 +150,18 @@ namespace Yaromir_Firewall_FINAL1
             about.Owner = this;
             about.ShowDialog();
         }
+
+        private void OpenSettings_Click(object sender, RoutedEventArgs e)
+        {
+            var settingsWindow = new SettingsWindow(this);
+            settingsWindow.ShowDialog();
+        }
+
+        public void UpdateLanguageFromService()
+        {
+            _isRussian = LanguageService.Instance.CurrentLanguage == "ru";
+            UpdateLanguage();
+        }
     }
 
     public static class SystemThemeHelper

@@ -100,6 +100,20 @@ namespace Yaromir_Firewall_FINAL1
             }
         }
 
+        public void UnblockProgram(string exeName)
+        {
+            var settings = SettingsManager.Instance;
+
+            if (settings.BlackList.Contains(exeName))
+            {
+                settings.BlackList.Remove(exeName);
+                settings.Save();
+            }
+
+            RemoveBlockRule(exeName);
+            Log($"[+] {exeName} разблокирован.");
+        }
+
         public void BlockProgram(string exeName, bool killRunning)
         {
             var settings = SettingsManager.Instance;
