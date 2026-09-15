@@ -9,6 +9,10 @@ __pycache__/
 *.a
 *.exe
 *.out
+*.pyc
+__pycache__/
+*.class
+*.o
 
 # Dependencies
 .venv/
@@ -31,7 +35,7 @@ htmlcov/
 .env.local
 .env.*
 
-# Editors
+# IDE/Editor files
 .vscode/
 .idea/
 *.swp
