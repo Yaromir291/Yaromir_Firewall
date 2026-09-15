@@ -64,7 +64,10 @@ namespace Yaromir_Firewall_FINAL1
                 var name = ItemsList.SelectedItem.ToString();
                 
                 // 🔥 КЛЮЧЕВОЕ ИСПРАВЛЕНИЕ: полностью разблокируем с убийством процесса
-                FirewallService.Instance.UnblockProgram(name, killRunning: true);
+                if (!string.IsNullOrEmpty(name))
+                {
+                    FirewallService.Instance.UnblockProgram(name, killRunning: true);
+                }
                 
                 RefreshList();
             }
