@@ -60,7 +60,7 @@ namespace Yaromir_Firewall_FINAL1
 
             if (ProgramsListBox.SelectedItem == null) return;
 
-            string programName = ProgramsListBox.SelectedItem.ToString();
+            string programName = ProgramsListBox.SelectedItem.ToString() ?? "";
             var settings = SettingsManager.Instance;
             var rule = settings.ProgramPortRules.FirstOrDefault(r => r.ProgramName == programName);
 
@@ -106,7 +106,7 @@ namespace Yaromir_Firewall_FINAL1
                 return;
             }
 
-            string programName = ProgramsListBox.SelectedItem.ToString();
+            string programName = ProgramsListBox.SelectedItem.ToString() ?? "";
             var settings = SettingsManager.Instance;
             var rule = settings.ProgramPortRules.FirstOrDefault(r => r.ProgramName == programName);
 
@@ -147,7 +147,7 @@ namespace Yaromir_Firewall_FINAL1
                 return;
             }
 
-            string programName = ProgramsListBox.SelectedItem.ToString();
+            string programName = ProgramsListBox.SelectedItem.ToString() ?? "";
             var settings = SettingsManager.Instance;
             var rule = settings.ProgramPortRules.FirstOrDefault(r => r.ProgramName == programName);
 
@@ -187,7 +187,7 @@ namespace Yaromir_Firewall_FINAL1
                 return;
             }
 
-            string programName = ProgramsListBox.SelectedItem.ToString();
+            string programName = ProgramsListBox.SelectedItem.ToString() ?? "";
             var settings = SettingsManager.Instance;
             var rule = settings.ProgramPortRules.FirstOrDefault(r => r.ProgramName == programName);
 

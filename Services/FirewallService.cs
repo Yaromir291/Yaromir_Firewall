@@ -132,6 +132,43 @@ namespace Yaromir_Firewall_FINAL1
             }
         }
 
+        public void UnblockProgram(string exeName, bool killRunning)
+        {
+            var settings = SettingsManager.Instance;
+
+            // Удаляем из чёрного списка
+            if (settings.BlackList.Contains(exeName))
+            {
+                settings.BlackList.Remove(exeName);
+                settings.Save();
+            }
+
+            // Удаляем правило блокировки
+            RemoveBlockRule(exeName);
+
+            // При необходимости убиваем процесс
+            if (killRunning)
+            {
+                try
+                {
+                    var processes = Process.GetProcessesByName(Path.GetFileNameWithoutExtension(exeName));
+                    foreach (var proc in processes)
+                    {
+                        try
+                        {
+                            proc.Kill();
+                            proc.WaitForExit(2000);
+                            Log($"[+] Процесс {proc.ProcessName} (PID: {proc.Id}) завершён.");
+                        }
+                        catch { }
+                    }
+                }
+                catch { }
+            }
+
+            Log($"[+] {exeName} разблокирован.");
+        }
+
         private void AddBlockRuleInternal(string exeName)
         {
             try

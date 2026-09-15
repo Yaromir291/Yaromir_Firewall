@@ -1,83 +1,30 @@
 ```
 # Build artifacts
-*.obj
 *.exe
 *.dll
 *.pdb
-*.user
-*.userosscache
-*.suo
-*.cache
+*.obj
 *.ilk
 *.exp
 *.lib
-*.tlog
-*.log
-*.iobj
-*.ipdb
-*.builds
-*.built
-*.generated.*
-*.[Rr]eSharper
-*.DotSettings.user
-*.ref
-*.gch
-*.gcda
-*.gcno
-*.profraw
-*.dyn.o
-*.dyn.i
-*.stackdump
-*.gem
-*.rsp
-*.rej
-*.orig
-*.backup
-*.bak
-*.tmp
-*.temp
-*.cache
-*.swp
-*.swo
-*~
+*.so
+*.dylib
 
 # Dependencies
 packages/
 bin/
 obj/
 out/
-dist/
-build/
-target/
-node_modules/
-vendor/
-deps/
-lib/
-external/
-third_party/
 
-# IDE specific
+# Logs
+*.log
+
+# User-specific files
 .vs/
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
+*.user
+*.userosscache
+*.suo
 
-# Environment
-.env
-.env.local
-.env.*
-!.env.example
-
-# OS generated files
-.DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
-Thumbs.db
-desktop.ini
-Icon?
+# Environment specific settings
+appsettings.*.json
 ```

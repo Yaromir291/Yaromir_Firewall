@@ -25,6 +25,25 @@ namespace Yaromir_Firewall_FINAL1
             RefreshData();
         }
 
+        public void UpdateLanguageFromService()
+        {
+            // Обновление текста для MonitorWindow
+            var lang = LanguageService.Instance;
+            this.Title = lang.GetResource("MonitorWindow_Title");
+            BackButton.ToolTip = lang.GetResource("MonitorWindow_BackButton_ToolTip");
+            RefreshRateLabel.Content = lang.GetResource("MonitorWindow_RefreshRateLabel");
+            
+            // Обновление заголовков колонок
+            if (ConnectionsGrid.Columns.Count >= 5)
+            {
+                ConnectionsGrid.Columns[0].Header = lang.GetResource("MonitorWindow_Column_ProcessName");
+                ConnectionsGrid.Columns[1].Header = lang.GetResource("MonitorWindow_Column_PID");
+                ConnectionsGrid.Columns[2].Header = lang.GetResource("MonitorWindow_Column_LocalPort");
+                ConnectionsGrid.Columns[3].Header = lang.GetResource("MonitorWindow_Column_RemoteAddress");
+                ConnectionsGrid.Columns[4].Header = lang.GetResource("MonitorWindow_Column_Protocol");
+            }
+        }
+
         private void RefreshData()
         {
             try

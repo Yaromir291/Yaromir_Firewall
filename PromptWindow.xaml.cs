@@ -20,6 +20,17 @@ namespace Yaromir_Firewall_FINAL1
             ProgramName.Text = programName;
             ProgramPath.Text = programPath;
             TargetInfo.Text = targetInfo;
+            UpdateLanguageFromService();
+        }
+
+        public void UpdateLanguageFromService()
+        {
+            var lang = LanguageService.Instance;
+            this.Title = lang.GetResource("PromptWindow_Title");
+            AllowButton.Content = lang.GetResource("PromptWindow_AllowButton");
+            BlockButton.Content = lang.GetResource("PromptWindow_BlockButton");
+            BlockAndKillButton.Content = lang.GetResource("PromptWindow_BlockAndKillButton");
+            OnceCheckBox.Content = lang.GetResource("PromptWindow_OnceCheckBox");
         }
 
         private void Finish(PromptResult result)
