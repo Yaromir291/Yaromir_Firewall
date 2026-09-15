@@ -102,24 +102,16 @@ namespace Yaromir_Firewall_FINAL1
         {
             var lang = LanguageService.Instance;
             
-            // Обновляем заголовок окна
-            this.Title = lang.GetResource("MainWindow_Title");
-            
-            // Кнопка языка
             LangButton.Content = _isRussian ? "🇷🇺" : "🇬🇧";
             LangButton.ToolTip = lang.GetResource(_isRussian ? "MainWindow_LangButton_ToolTip_RU" : "MainWindow_LangButton_ToolTip_EN");
 
-            // Кнопки главного меню
             OpenMonitorButton.Content = lang.GetResource("MainWindow_OpenMonitorButton");
             WhiteListButton.Content = lang.GetResource("MainWindow_WhiteListButton");
             BlackListButton.Content = lang.GetResource("MainWindow_BlackListButton");
 
-            // Подсказки кнопок
             ThemeButton.ToolTip = lang.GetResource("MainWindow_ThemeButton_ToolTip");
             AboutButton.ToolTip = lang.GetResource("MainWindow_AboutButton_ToolTip");
-            SettingsButton.ToolTip = lang.GetResource("MainWindow_SettingsButton_ToolTip");
             
-            // Статус и лицензия
             UpdateStatus();
             LicenseText.Text = lang.GetResource("MainWindow_LicenseText");
         }
