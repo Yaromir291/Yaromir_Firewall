@@ -1,4 +1,4 @@
-```gitignore
+```
 # Build artifacts
 *.obj
 *.exe
@@ -8,28 +8,76 @@
 *.userosscache
 *.suo
 *.cache
+*.ilk
+*.exp
+*.lib
+*.tlog
 *.log
+*.iobj
+*.ipdb
+*.builds
+*.built
+*.generated.*
+*.[Rr]eSharper
+*.DotSettings.user
+*.ref
+*.gch
+*.gcda
+*.gcno
+*.profraw
+*.dyn.o
+*.dyn.i
+*.stackdump
+*.gem
+*.rsp
+*.rej
+*.orig
+*.backup
+*.bak
 *.tmp
+*.temp
+*.cache
+*.swp
+*.swo
+*~
 
 # Dependencies
 packages/
 bin/
 obj/
 out/
+dist/
+build/
+target/
+node_modules/
+vendor/
+deps/
+lib/
+external/
+third_party/
 
-# Environment
-.env
-.env.local
-*.env.*
-
-# Editors
+# IDE specific
 .vs/
 .vscode/
 .idea/
 *.swp
 *.swo
+*~
 
-# OS
+# Environment
+.env
+.env.local
+.env.*
+!.env.example
+
+# OS generated files
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
 Thumbs.db
+desktop.ini
+Icon?
 ```
