@@ -68,11 +68,7 @@ namespace Yaromir_Firewall_FINAL1
                     Application.Current.Resources.MergedDictionaries.Clear();
                     Application.Current.Resources.MergedDictionaries.Add(themeDict);
 
-                    var bgImage = Application.Current.Resources["BackgroundImage"] as ImageBrush;
-                    if (bgImage != null)
-                        this.Background = bgImage;
-                    else
-                        this.Background = (System.Windows.Media.Brush)Application.Current.Resources["BackgroundBrush"];
+                    this.Background = (System.Windows.Media.Brush)Application.Current.Resources["BackgroundBrush"];
                 }
 
                 if (state <= 2)

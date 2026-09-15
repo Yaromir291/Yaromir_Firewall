@@ -3,7 +3,6 @@
 
     <ResourceDictionary x:Key="LightTheme">
         <SolidColorBrush x:Key="BackgroundBrush" Color="#F5F5F5"/>
-        <ImageBrush x:Key="BackgroundImage" ImageSource="Resources/bg_light.jpg"/>
         <SolidColorBrush x:Key="ForegroundBrush" Color="#1E1E1E"/>
         <SolidColorBrush x:Key="ButtonBackground" Color="#E0E0E0"/>
         <SolidColorBrush x:Key="ButtonHover" Color="#CCCCCC"/>
@@ -13,7 +12,6 @@
 
     <ResourceDictionary x:Key="DarkTheme">
         <SolidColorBrush x:Key="BackgroundBrush" Color="#1E1E1E"/>
-        <ImageBrush x:Key="BackgroundImage" ImageSource="Resources/bg_dark.jpg"/>
         <SolidColorBrush x:Key="ForegroundBrush" Color="#F5F5F5"/>
         <SolidColorBrush x:Key="ButtonBackground" Color="#3A3A3A"/>
         <SolidColorBrush x:Key="ButtonHover" Color="#4A4A4A"/>
@@ -23,7 +21,6 @@
 
     <ResourceDictionary x:Key="NeonTheme">
         <SolidColorBrush x:Key="BackgroundBrush" Color="#0A0A1A"/>
-        <ImageBrush x:Key="BackgroundImage" ImageSource="Resources/bg_neon.jpg"/>
         <SolidColorBrush x:Key="ForegroundBrush" Color="#00FFCC"/>
         <SolidColorBrush x:Key="ButtonBackground" Color="#1A1A3A"/>
         <SolidColorBrush x:Key="ButtonHover" Color="#2A2A5A"/>
@@ -33,7 +30,6 @@
 
     <ResourceDictionary x:Key="GoldTheme">
         <SolidColorBrush x:Key="BackgroundBrush" Color="#1A1208"/>
-        <ImageBrush x:Key="BackgroundImage" ImageSource="Resources/bg_gold.jpg"/>
         <SolidColorBrush x:Key="ForegroundBrush" Color="#FFD700"/>
         <SolidColorBrush x:Key="ButtonBackground" Color="#2A1F0A"/>
         <SolidColorBrush x:Key="ButtonHover" Color="#4A3510"/>

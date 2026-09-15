@@ -18,6 +18,7 @@ namespace Yaromir_Firewall_FINAL1
         public List<string> BlackList { get; set; } = new List<string>();
         public int RefreshRate { get; set; } = 5;
         public List<int> BlockedPorts { get; set; } = new List<int>();
+        public List<ProgramPortRule> ProgramPortRules { get; set; } = new List<ProgramPortRule>();
 
         /// <summary>
         /// true, если приложение когда-либо запускалось версии 1.0 на этом компьютере.
@@ -49,6 +50,7 @@ namespace Yaromir_Firewall_FINAL1
                         HadVersion1_0 = data.HadVersion1_0;
                         BlockedPorts = data.BlockedPorts ?? new List<int>();
                         ThemeIndex = data.ThemeIndex;
+                        ProgramPortRules = data.ProgramPortRules ?? new List<ProgramPortRule>();
                     }
                 }
                 catch { }
