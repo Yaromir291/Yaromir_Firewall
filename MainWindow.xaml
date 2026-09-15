@@ -102,6 +102,6 @@
         <!-- Лицензионное уведомление -->
         <TextBlock Grid.Row="3" Text="© 2026 Яромир. Лицензия Apache 2.0." 
                    Foreground="Gray" HorizontalAlignment="Center" 
-                   FontSize="9" Margin="0,5,0,0"/>
+                   FontSize="9" Margin="0,5,0,0" x:Name="LicenseText"/>
     </Grid>
 </Window>

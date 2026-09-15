@@ -19,7 +19,7 @@ namespace Yaromir_Firewall_FINAL1
             InitializeComponent();
             ProgramName.Text = programName;
             ProgramPath.Text = programPath;
-            TargetInfo.Text = targetInfo;
+            TargetInfo.Text = LanguageService.Instance.GetResource("PromptWindow_TargetInfo", targetInfo);
             UpdateLanguageFromService();
         }
 

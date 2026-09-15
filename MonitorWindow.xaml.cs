@@ -33,6 +33,11 @@ namespace Yaromir_Firewall_FINAL1
             BackButton.ToolTip = lang.GetResource("MonitorWindow_BackButton_ToolTip");
             RefreshRateLabel.Text = lang.GetResource("MonitorWindow_RefreshRateLabel");
             
+            // Обновление элементов ComboBox
+            FastOption.Content = lang.GetResource("MonitorWindow_RefreshRate_Fast");
+            ModerateOption.Content = lang.GetResource("MonitorWindow_RefreshRate_Moderate");
+            SlowOption.Content = lang.GetResource("MonitorWindow_RefreshRate_Slow");
+            
             // Обновление заголовков колонок
             if (ConnectionsGrid.Columns.Count >= 5)
             {
@@ -41,6 +46,7 @@ namespace Yaromir_Firewall_FINAL1
                 ConnectionsGrid.Columns[2].Header = lang.GetResource("MonitorWindow_Column_LocalPort");
                 ConnectionsGrid.Columns[3].Header = lang.GetResource("MonitorWindow_Column_RemoteAddress");
                 ConnectionsGrid.Columns[4].Header = lang.GetResource("MonitorWindow_Column_Protocol");
+                ConnectionsGrid.Columns[5].Header = lang.GetResource("MonitorWindow_Column_Status");
             }
         }
 
