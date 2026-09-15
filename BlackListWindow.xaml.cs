@@ -12,6 +12,16 @@ namespace Yaromir_Firewall_FINAL1
             InitializeComponent();
             _settings = SettingsManager.Instance;
             RefreshList();
+            UpdateLanguageFromService();
+        }
+
+        public void UpdateLanguageFromService()
+        {
+            var lang = LanguageService.Instance;
+            this.Title = lang.GetResource("BlackListWindow_Title");
+            AddButton.Content = lang.GetResource("BlackListWindow_AddButton");
+            RemoveButton.Content = lang.GetResource("BlackListWindow_RemoveButton");
+            ClearButton.Content = lang.GetResource("BlackListWindow_ClearButton");
         }
 
         private void RefreshList()

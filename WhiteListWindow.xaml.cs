@@ -12,6 +12,16 @@ namespace Yaromir_Firewall_FINAL1
             InitializeComponent();
             _settings = SettingsManager.Instance;
             RefreshList();
+            UpdateLanguageFromService();
+        }
+
+        public void UpdateLanguageFromService()
+        {
+            var lang = LanguageService.Instance;
+            this.Title = lang.GetResource("WhiteListWindow_Title");
+            AddButton.Content = lang.GetResource("WhiteListWindow_AddButton");
+            RemoveButton.Content = lang.GetResource("WhiteListWindow_RemoveButton");
+            ClearButton.Content = lang.GetResource("WhiteListWindow_ClearButton");
         }
 
         private void RefreshList()
@@ -49,7 +59,7 @@ namespace Yaromir_Firewall_FINAL1
         {
             if (ItemsList.SelectedItem != null)
             {
-                var name = ItemsList.SelectedItem.ToString();
+                var name = ItemsList.SelectedItem.ToString() ?? "";
                 _settings.WhiteList.Remove(name);
                 _settings.Save();
                 RefreshList();
