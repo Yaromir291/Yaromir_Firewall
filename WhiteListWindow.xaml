@@ -13,9 +13,9 @@
         <ListBox x:Name="ItemsList" Background="{DynamicResource BackgroundBrush}"
                  Foreground="{DynamicResource ForegroundBrush}"/>
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
-            <Button Content="Добавить" Width="80" Click="Add_Click"/>
-            <Button Content="Удалить" Width="80" Click="Remove_Click"/>
-            <Button Content="Очистить всё" Width="100" Click="Clear_Click"/>
+            <Button x:Name="AddButton" Content="Добавить" Width="80" Click="Add_Click"/>
+            <Button x:Name="RemoveButton" Content="Удалить" Width="80" Click="Remove_Click"/>
+            <Button x:Name="ClearButton" Content="Очистить всё" Width="100" Click="Clear_Click"/>
         </StackPanel>
     </Grid>
 </Window>

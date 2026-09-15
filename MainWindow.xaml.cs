@@ -110,6 +110,11 @@ namespace Yaromir_Firewall_FINAL1
             UpdateStatus();
         }
 
+        public void UpdateLanguageFromService()
+        {
+            UpdateLanguage();
+        }
+
         private void UpdateStatus()
         {
             try

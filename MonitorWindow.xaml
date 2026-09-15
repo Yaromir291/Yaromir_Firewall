@@ -11,7 +11,7 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Button Grid.Row="0" Content="←" Width="40" Height="30" FontSize="18"
+        <Button x:Name="BackButton" Grid.Row="0" Content="←" Width="40" Height="30" FontSize="18"
                 HorizontalAlignment="Left" Click="Back_Click" ToolTip="Назад"/>
         <DataGrid x:Name="ConnectionsGrid" Grid.Row="1" Margin="0,10,0,10"
                   AutoGenerateColumns="False" 
@@ -27,7 +27,7 @@
             </DataGrid.Columns>
         </DataGrid>
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
-            <TextBlock Text="Частота обновления:" VerticalAlignment="Center" Margin="0,0,10,0"/>
+            <TextBlock x:Name="RefreshRateLabel" Text="Частота обновления:" VerticalAlignment="Center" Margin="0,0,10,0"/>
             <ComboBox x:Name="RefreshRateCombo" Width="120" SelectionChanged="RefreshRate_Changed">
                 <ComboBoxItem Content="Быстро (1 сек)" Tag="1"/>
                 <ComboBoxItem Content="Умеренно (5 сек)" Tag="5" IsSelected="True"/>
