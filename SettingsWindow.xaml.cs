@@ -36,34 +36,6 @@ namespace Yaromir_Firewall_FINAL1
 
             // Загрузка программ
             RefreshProgramsList();
-            
-            // Применяем язык при открытии
-            UpdateLanguageFromService();
-        }
-
-        public void UpdateLanguageFromService()
-        {
-            var lang = LanguageService.Instance;
-            bool isRussian = lang.IsRussian;
-
-            this.Title = lang.GetResource("SettingsWindow_Title");
-            
-            // Обновляем элементы ComboBox для темы
-            if (ThemeComboBox.Items.Count > 0)
-            {
-                ((ComboBoxItem)ThemeComboBox.Items[0]).Content = lang.GetResource("SettingsWindow_Theme_Light");
-                ((ComboBoxItem)ThemeComboBox.Items[1]).Content = lang.GetResource("SettingsWindow_Theme_Dark");
-                ((ComboBoxItem)ThemeComboBox.Items[2]).Content = lang.GetResource("SettingsWindow_Theme_System");
-                ((ComboBoxItem)ThemeComboBox.Items[3]).Content = lang.GetResource("SettingsWindow_Theme_Neon");
-                ((ComboBoxItem)ThemeComboBox.Items[4]).Content = lang.GetResource("SettingsWindow_Theme_Gold");
-            }
-
-            // Обновляем элементы ComboBox для языка
-            if (LanguageComboBox.Items.Count > 0)
-            {
-                ((ComboBoxItem)LanguageComboBox.Items[0]).Content = lang.GetResource("SettingsWindow_Language_Russian");
-                ((ComboBoxItem)LanguageComboBox.Items[1]).Content = lang.GetResource("SettingsWindow_Language_English");
-            }
         }
 
         private void RefreshProgramsList()

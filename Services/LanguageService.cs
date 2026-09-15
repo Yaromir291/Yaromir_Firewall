@@ -43,7 +43,6 @@ namespace Yaromir_Firewall_FINAL1
             { "MainWindow_LangButton_ToolTip_RU", "Русский" },
             { "MainWindow_LangButton_ToolTip_EN", "English" },
             { "MainWindow_AboutButton_ToolTip", "О программе" },
-            { "MainWindow_SettingsButton_ToolTip", "Настройки" },
             { "MainWindow_MinimizeButton", "ТРЕЙ" },
             { "MainWindow_OpenMonitorButton", "Открыть мониторинг" },
             { "MainWindow_WhiteListButton", "Белый список" },
@@ -81,38 +80,6 @@ namespace Yaromir_Firewall_FINAL1
             { "BlackListWindow_AddDialog_Title", "Выберите программу для блокировки" },
             { "BlackListWindow_ClearConfirm_Title", "Подтверждение" },
             { "BlackListWindow_ClearConfirm_Message", "Очистить весь чёрный список?" },
-
-            // SettingsWindow
-            { "SettingsWindow_Title", "Настройки" },
-            { "SettingsWindow_ThemeLabel", "Тема:" },
-            { "SettingsWindow_Theme_Light", "Светлая" },
-            { "SettingsWindow_Theme_Dark", "Тёмная" },
-            { "SettingsWindow_Theme_System", "Системная" },
-            { "SettingsWindow_Theme_Neon", "Неон" },
-            { "SettingsWindow_Theme_Gold", "Золотая" },
-            { "SettingsWindow_LanguageLabel", "Язык:" },
-            { "SettingsWindow_Language_Russian", "Русский" },
-            { "SettingsWindow_Language_English", "Английский" },
-            { "SettingsWindow_ProgramPortsTitle", "Правила портов для программ" },
-            { "SettingsWindow_ProgramsLabel", "Программы:" },
-            { "SettingsWindow_AddButton", "Добавить" },
-            { "SettingsWindow_RemoveButton", "Удалить" },
-            { "SettingsWindow_AllowedPortsLabel", "Разрешённые порты:" },
-            { "SettingsWindow_BlockedPortsLabel", "Запрещённые порты:" },
-            { "SettingsWindow_AddPortLabel", "Добавить / удалить порт:" },
-            { "SettingsWindow_AllowPortButton", "Разрешить" },
-            { "SettingsWindow_BlockPortButton", "Запретить" },
-            { "SettingsWindow_SaveButton", "Сохранить" },
-            { "SettingsWindow_NewProgramToolTip", "Введите имя программы (например, chrome.exe)" },
-            { "SettingsWindow_PortToolTip", "Введите номер порта (1-65535)" },
-            { "SettingsWindow_EnterProgramName", "Введите имя программы!" },
-            { "SettingsWindow_ProgramExists", "Такая программа уже есть в списке!" },
-            { "SettingsWindow_SelectProgram", "Выберите программу для удаления!" },
-            { "SettingsWindow_ConfirmRemoveProgram", "Удалить программу \"{0}\" и все её правила?" },
-            { "SettingsWindow_SelectProgramFirst", "Сначала выберите программу!" },
-            { "SettingsWindow_EnterValidPort", "Введите корректный номер порта (1-65535)!" },
-            { "SettingsWindow_PortNotFound", "Такой порт не найден в правилах выбранной программы!" },
-            { "SettingsWindow_SettingsSaved", "Настройки сохранены!" },
 
             // AboutWindow
             { "AboutWindow_Title", "О программе" },
@@ -153,7 +120,6 @@ namespace Yaromir_Firewall_FINAL1
             { "MainWindow_LangButton_ToolTip_RU", "Русский" },
             { "MainWindow_LangButton_ToolTip_EN", "English" },
             { "MainWindow_AboutButton_ToolTip", "About" },
-            { "MainWindow_SettingsButton_ToolTip", "Settings" },
             { "MainWindow_MinimizeButton", "TRAY" },
             { "MainWindow_OpenMonitorButton", "Open Monitor" },
             { "MainWindow_WhiteListButton", "Whitelist" },
@@ -191,38 +157,6 @@ namespace Yaromir_Firewall_FINAL1
             { "BlackListWindow_AddDialog_Title", "Select program to block" },
             { "BlackListWindow_ClearConfirm_Title", "Confirmation" },
             { "BlackListWindow_ClearConfirm_Message", "Clear the entire blacklist?" },
-
-            // SettingsWindow
-            { "SettingsWindow_Title", "Settings" },
-            { "SettingsWindow_ThemeLabel", "Theme:" },
-            { "SettingsWindow_Theme_Light", "Light" },
-            { "SettingsWindow_Theme_Dark", "Dark" },
-            { "SettingsWindow_Theme_System", "System" },
-            { "SettingsWindow_Theme_Neon", "Neon" },
-            { "SettingsWindow_Theme_Gold", "Gold" },
-            { "SettingsWindow_LanguageLabel", "Language:" },
-            { "SettingsWindow_Language_Russian", "Russian" },
-            { "SettingsWindow_Language_English", "English" },
-            { "SettingsWindow_ProgramPortsTitle", "Program Port Rules" },
-            { "SettingsWindow_ProgramsLabel", "Programs:" },
-            { "SettingsWindow_AddButton", "Add" },
-            { "SettingsWindow_RemoveButton", "Remove" },
-            { "SettingsWindow_AllowedPortsLabel", "Allowed Ports:" },
-            { "SettingsWindow_BlockedPortsLabel", "Blocked Ports:" },
-            { "SettingsWindow_AddPortLabel", "Add / Remove Port:" },
-            { "SettingsWindow_AllowPortButton", "Allow" },
-            { "SettingsWindow_BlockPortButton", "Block" },
-            { "SettingsWindow_SaveButton", "Save" },
-            { "SettingsWindow_NewProgramToolTip", "Enter program name (e.g., chrome.exe)" },
-            { "SettingsWindow_PortToolTip", "Enter port number (1-65535)" },
-            { "SettingsWindow_EnterProgramName", "Enter program name!" },
-            { "SettingsWindow_ProgramExists", "This program is already in the list!" },
-            { "SettingsWindow_SelectProgram", "Select a program to remove!" },
-            { "SettingsWindow_ConfirmRemoveProgram", "Remove program \"{0}\" and all its rules?" },
-            { "SettingsWindow_SelectProgramFirst", "Select a program first!" },
-            { "SettingsWindow_EnterValidPort", "Enter a valid port number (1-65535)!" },
-            { "SettingsWindow_PortNotFound", "This port is not found in the selected program's rules!" },
-            { "SettingsWindow_SettingsSaved", "Settings saved!" },
 
             // AboutWindow
             { "AboutWindow_Title", "About" },
@@ -303,9 +237,6 @@ namespace Yaromir_Firewall_FINAL1
                     break;
                 case PromptWindow pw:
                     pw.UpdateLanguageFromService();
-                    break;
-                case SettingsWindow sw:
-                    sw.UpdateLanguageFromService();
                     break;
             }
         }
