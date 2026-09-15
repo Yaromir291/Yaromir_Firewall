@@ -111,6 +111,7 @@ namespace Yaromir_Firewall_FINAL1
 
             ThemeButton.ToolTip = lang.GetResource("MainWindow_ThemeButton_ToolTip");
             AboutButton.ToolTip = lang.GetResource("MainWindow_AboutButton_ToolTip");
+            MinimizeButton.Content = lang.GetResource("MainWindow_MinimizeButton");
             
             UpdateStatus();
             LicenseText.Text = lang.GetResource("MainWindow_LicenseText");
