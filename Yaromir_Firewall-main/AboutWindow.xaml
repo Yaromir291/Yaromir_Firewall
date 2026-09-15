@@ -1,0 +1,28 @@
+<Window x:Class="Yaromir_Firewall_FINAL1.AboutWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="О программе" Height="350" Width="400"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
+        Background="{DynamicResource BackgroundBrush}"
+        Foreground="{DynamicResource ForegroundBrush}">
+    <StackPanel Margin="20" VerticalAlignment="Center">
+        <Image Source="Resources/icon.ico" Width="64" Height="64" Margin="0,0,0,15"/>
+        
+        <TextBlock Text="Yaromir Firewall" FontSize="18" FontWeight="Bold" 
+                   HorizontalAlignment="Center" Margin="0,0,0,5"/>
+        <TextBlock Text="Версия 1.0.0" FontSize="14" 
+                   HorizontalAlignment="Center" Margin="0,0,0,20"/>
+        
+        <TextBlock Text="© 2026 Яромир. Все права защищены." 
+                   HorizontalAlignment="Center" Margin="0,0,0,5"/>
+        <TextBlock Text="Исходный код доступен под лицензией Apache 2.0." 
+                   HorizontalAlignment="Center" Margin="0,0,0,5"/>
+        <TextBlock Text="Логотип и название являются товарными знаками автора." 
+                   HorizontalAlignment="Center" FontSize="11" 
+                   Foreground="Gray" Margin="0,0,0,20"/>
+        
+        <Button Content="Закрыть" Width="80" Margin="0,10,0,0" 
+                HorizontalAlignment="Center" Click="Close_Click"/>
+    </StackPanel>
+</Window>
