@@ -1,6 +1,4 @@
-using System;
 using System.Windows;
-using System.Windows.Controls;
 
 namespace Yaromir_Firewall_FINAL1
 {
@@ -13,8 +11,8 @@ namespace Yaromir_Firewall_FINAL1
 
     public partial class PromptWindow : Window
     {
-        public PromptResult Result { get; private set; }
-        public bool OnlyOnce => OnceCheckBox.IsChecked ?? true;
+        public PromptResult Result { get; private set; } = PromptResult.Block;
+        public bool OnlyOnce { get; private set; } = true;
 
         public PromptWindow(string programName, string programPath, string targetInfo)
         {
@@ -22,39 +20,18 @@ namespace Yaromir_Firewall_FINAL1
             ProgramName.Text = programName;
             ProgramPath.Text = programPath;
             TargetInfo.Text = targetInfo;
-            Result = PromptResult.Block;
         }
 
-        private void Allow_Click(object sender, RoutedEventArgs e)
+        private void Finish(PromptResult result)
         {
-            Result = PromptResult.Allow;
+            Result = result;
+            OnlyOnce = OnceCheckBox.IsChecked == true;
             DialogResult = true;
             Close();
         }
 
-        private void Block_Click(object sender, RoutedEventArgs e)
-        {
-            Result = PromptResult.Block;
-            DialogResult = true;
-            Close();
-        }
-
-        private void BlockAndKill_Click(object sender, RoutedEventArgs e)
-        {
-            Result = PromptResult.BlockAndKill;
-            DialogResult = true;
-            Close();
-        }
-
-        public void UpdateLanguageFromService()
-        {
-            var lang = LanguageService.Instance.CurrentLanguage;
-            
-            Title = LanguageService.Instance.GetResource("PromptWindowTitle", lang);
-            AllowButton.Content = LanguageService.Instance.GetResource("AllowButton", lang);
-            BlockButton.Content = LanguageService.Instance.GetResource("BlockButton", lang);
-            BlockAndKillButton.Content = LanguageService.Instance.GetResource("BlockAndKillButton", lang);
-            OnceCheckBox.Content = LanguageService.Instance.GetResource("OnlyOnceCheckBox", lang);
-        }
+        private void Allow_Click(object sender, RoutedEventArgs e) => Finish(PromptResult.Allow);
+        private void Block_Click(object sender, RoutedEventArgs e) => Finish(PromptResult.Block);
+        private void BlockAndKill_Click(object sender, RoutedEventArgs e) => Finish(PromptResult.BlockAndKill);
     }
 }

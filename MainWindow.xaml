@@ -3,10 +3,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Yaromir Firewall" Height="400" Width="500"
         WindowStartupLocation="CenterScreen"
-        ResizeMode="CanMinimize">
+        ResizeMode="CanMinimize"
+        Closing="Window_Closing">
 
     <Window.Resources>
-        <!-- Стиль для квадратной кнопки "i" (такого же размера как тема/язык) -->
+        <!-- Стиль для квадратной кнопки "i" -->
         <Style x:Key="InfoButtonStyle" TargetType="Button">
             <Setter Property="Width" Value="40"/>
             <Setter Property="Height" Value="40"/>
@@ -25,7 +26,7 @@
             </Style.Triggers>
         </Style>
 
-        <!-- Темы (цветовые схемы для Light/Dark/System) -->
+        <!-- Темы -->
         <ResourceDictionary x:Key="LightTheme">
             <SolidColorBrush x:Key="BackgroundBrush" Color="#F5F5F5"/>
             <SolidColorBrush x:Key="ForegroundBrush" Color="#1E1E1E"/>
@@ -60,21 +61,23 @@
             <Button x:Name="LangButton" Width="40" Height="40" FontSize="20" Padding="0" 
                     ToolTip="Русский" Click="LangButton_Click">🇷🇺</Button>
             
-            <!-- Кнопка "i" (квадратная, 40x40, в том же ряду) -->
+            <!-- Кнопка "i" (информация) -->
             <Button x:Name="AboutButton" 
                     Style="{StaticResource InfoButtonStyle}"
                     Content="i"
                     ToolTip="О программе"
                     Click="OpenAbout_Click"
                     Margin="5,0,0,0"/>
-        </StackPanel>
 
-        <Button x:Name="MinimizeButton" Grid.Row="0" HorizontalAlignment="Right" Width="80" Height="30" 
-                Click="MinimizeToTray_Click" FontSize="12">ТРЕЙ</Button>
+            <!-- Кнопка настроек (⚙️) -->
+            <Button x:Name="SettingsButton" 
+                    Width="40" Height="40" FontSize="20" Padding="0" 
+                    ToolTip="Настройки" Click="OpenSettings_Click"
+                    Margin="5,0,0,0">⚙️</Button>
+        </StackPanel>
 
         <!-- Центр -->
         <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <!-- Иконка (110x110, без обрезки) -->
             <Image x:Name="AppIcon" 
                    Source="Resources/icon.ico" 
                    Stretch="Uniform"

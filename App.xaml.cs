@@ -15,15 +15,12 @@ namespace Yaromir_Firewall_FINAL1
 
             if (System.Diagnostics.Process.GetProcessesByName("Yaromir_Firewall_FINAL1").Length > 1)
             {
-                MessageBox.Show(LanguageService.Instance.Get("App_DuplicateRun_Message"), LanguageService.Instance.Get("App_DuplicateRun_Title"), MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("Программа уже запущена!", "Yaromir_Firewall_FINAL1", MessageBoxButton.OK, MessageBoxImage.Information);
                 Shutdown();
                 return;
             }
 
             SettingsManager.Instance.Load();
-            
-            // Применяем сохранённый язык
-            LanguageService.Instance.IsRussian = SettingsManager.Instance.IsRussian;
 
             // Путь к иконке в папке с .exe
             string iconPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "icon.ico");
@@ -43,9 +40,22 @@ namespace Yaromir_Firewall_FINAL1
                 );
             }
 
-            UpdateTrayLanguage();
+            _notifyIcon.ToolTipText = "Yaromir Firewall — защита подключений";
             _notifyIcon.ContextMenu = new System.Windows.Controls.ContextMenu();
-            UpdateTrayMenu();
+
+            var openItem = new System.Windows.Controls.MenuItem { Header = "Открыть" };
+            openItem.Click += (s, ev) => { MainWindow?.Show(); MainWindow?.Activate(); };
+            _notifyIcon.ContextMenu.Items.Add(openItem);
+
+            var exitItem = new System.Windows.Controls.MenuItem { Header = "Выход" };
+            exitItem.Click += (s, ev) =>
+            {
+                // Разрешаем реальное закрытие окна (крестик обычно только прячет его)
+                if (MainWindow is MainWindow mw)
+                    mw.AllowExit = true;
+                Shutdown();
+            };
+            _notifyIcon.ContextMenu.Items.Add(exitItem);
 
             _notifyIcon.Visibility = Visibility.Visible;
 
@@ -61,29 +71,6 @@ namespace Yaromir_Firewall_FINAL1
 
             FirewallService.Instance.Start();
             NetworkMonitor.Instance.Start();
-        }
-
-        private void UpdateTrayLanguage()
-        {
-            if (_notifyIcon != null)
-            {
-                _notifyIcon.ToolTipText = LanguageService.Instance.Get("App_TrayToolTip");
-            }
-        }
-
-        private void UpdateTrayMenu()
-        {
-            if (_notifyIcon?.ContextMenu == null) return;
-
-            _notifyIcon.ContextMenu.Items.Clear();
-
-            var openItem = new System.Windows.Controls.MenuItem { Header = LanguageService.Instance.Get("App_TrayMenu_Open") };
-            openItem.Click += (s, ev) => { MainWindow?.Show(); MainWindow?.Activate(); };
-            _notifyIcon.ContextMenu.Items.Add(openItem);
-
-            var exitItem = new System.Windows.Controls.MenuItem { Header = LanguageService.Instance.Get("App_TrayMenu_Exit") };
-            exitItem.Click += (s, ev) => { Shutdown(); };
-            _notifyIcon.ContextMenu.Items.Add(exitItem);
         }
 
         protected override void OnExit(ExitEventArgs e)

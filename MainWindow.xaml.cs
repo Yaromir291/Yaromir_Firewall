@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using System.Windows;
+using System.Windows.Media;
 using System.Windows.Threading;
 
 namespace Yaromir_Firewall_FINAL1
@@ -10,11 +11,20 @@ namespace Yaromir_Firewall_FINAL1
         private bool _isRussian = true;
         private DispatcherTimer? _statusTimer;
 
+        /// <summary>
+        /// true — разрешить реальное закрытие окна (выход через трей).
+        /// false — крестик только сворачивает окно в трей.
+        /// </summary>
+        public bool AllowExit { get; set; } = false;
+
         public MainWindow()
         {
             InitializeComponent();
 
-            ApplyTheme(2);
+            // Язык берём из сохранённых настроек
+            _isRussian = SettingsManager.Instance.IsRussian;
+
+            ApplyTheme(SettingsManager.Instance.Theme);
             UpdateLanguage();
 
             _statusTimer = new DispatcherTimer();
@@ -23,13 +33,17 @@ namespace Yaromir_Firewall_FINAL1
             _statusTimer.Start();
         }
 
+        // Кнопка темы — переключает только Светлая/Тёмная/Системная
         private void ThemeButton_Click(object sender, RoutedEventArgs e)
         {
-            _themeState = (_themeState + 1) % 3;
+            int current = _themeState;
+            if (current > 2) current = 0;
+            _themeState = (current + 1) % 3;
             ApplyTheme(_themeState);
         }
 
-        private void ApplyTheme(int state)
+        // ПУБЛИЧНЫЙ МЕТОД — доступен из SettingsWindow
+        public void ApplyTheme(int state)
         {
             try
             {
@@ -40,9 +54,13 @@ namespace Yaromir_Firewall_FINAL1
                 {
                     case 0: themeName = "LightTheme"; iconText = "☀️"; break;
                     case 1: themeName = "DarkTheme"; iconText = "🌙"; break;
-                    default:
+                    case 2:
                         themeName = SystemThemeHelper.GetSystemTheme() ? "LightTheme" : "DarkTheme";
-                        iconText = "🖥"; break;
+                        iconText = "🖥";
+                        break;
+                    case 3: themeName = "NeonTheme"; iconText = "💡"; break;
+                    case 4: themeName = "GoldTheme"; iconText = "⭐"; break;
+                    default: themeName = "LightTheme"; iconText = "☀️"; break;
                 }
 
                 if (this.Resources[themeName] is ResourceDictionary themeDict)
@@ -50,10 +68,17 @@ namespace Yaromir_Firewall_FINAL1
                     Application.Current.Resources.MergedDictionaries.Clear();
                     Application.Current.Resources.MergedDictionaries.Add(themeDict);
 
-                    this.Background = (System.Windows.Media.Brush)Application.Current.Resources["BackgroundBrush"];
+                    var bgImage = Application.Current.Resources["BackgroundImage"] as ImageBrush;
+                    if (bgImage != null)
+                        this.Background = bgImage;
+                    else
+                        this.Background = (System.Windows.Media.Brush)Application.Current.Resources["BackgroundBrush"];
                 }
 
-                ThemeButton.Content = iconText;
+                if (state <= 2)
+                    ThemeButton.Content = iconText;
+                else
+                    ThemeButton.Content = "🖥";
             }
             catch (Exception ex)
             {
@@ -64,34 +89,27 @@ namespace Yaromir_Firewall_FINAL1
         private void LangButton_Click(object sender, RoutedEventArgs e)
         {
             _isRussian = !_isRussian;
+            // Сохраняем выбор языка, чтобы пережить перезапуск
+            SettingsManager.Instance.IsRussian = _isRussian;
+            SettingsManager.Instance.Save();
+            UpdateLanguage();
+        }
+
+        // ПУБЛИЧНЫЙ МЕТОД — доступен из SettingsWindow
+        public void SetLanguage(bool isRussian)
+        {
+            _isRussian = isRussian;
             UpdateLanguage();
         }
 
         private void UpdateLanguage()
         {
-            _isRussian = !_isRussian;
             LangButton.Content = _isRussian ? "🇷🇺" : "🇬🇧";
             LangButton.ToolTip = _isRussian ? "Русский" : "English";
 
             OpenMonitorButton.Content = _isRussian ? "Открыть мониторинг" : "Open Monitor";
             WhiteListButton.Content = _isRussian ? "Белый список" : "Whitelist";
             BlackListButton.Content = _isRussian ? "Чёрный список" : "Blacklist";
-            MinimizeButton.Content = _isRussian ? "ТРЕЙ" : "TRAY";
-
-            UpdateStatus();
-        }
-
-        public void UpdateLanguageFromService()
-        {
-            var lang = LanguageService.Instance.CurrentLanguage;
-            
-            LangButton.Content = lang == "ru" ? "🇷🇺" : "🇬🇧";
-            LangButton.ToolTip = lang == "ru" ? "Русский" : "English";
-
-            OpenMonitorButton.Content = LanguageService.Instance.GetResource("OpenMonitorButton", lang);
-            WhiteListButton.Content = LanguageService.Instance.GetResource("WhiteListButton", lang);
-            BlackListButton.Content = LanguageService.Instance.GetResource("BlackListButton", lang);
-            MinimizeButton.Content = LanguageService.Instance.GetResource("MinimizeButton", lang);
 
             UpdateStatus();
         }
@@ -133,22 +151,27 @@ namespace Yaromir_Firewall_FINAL1
             bl.Show();
         }
 
-        private void MinimizeToTray_Click(object sender, RoutedEventArgs e)
+        // Крестик: не закрываем программу, а сворачиваем в трей
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            if (AllowExit) return; // выход через меню трея — закрываем по-настоящему
+
+            e.Cancel = true;
             Hide();
         }
 
-        private void Window_Closed(object sender, EventArgs e)
-        {
-            Hide();
-        }
-
-        // 👇 НОВЫЙ МЕТОД ДЛЯ КНОПКИ "О ПРОГРАММЕ"
         private void OpenAbout_Click(object sender, RoutedEventArgs e)
         {
             var about = new AboutWindow();
             about.Owner = this;
             about.ShowDialog();
+        }
+
+        private void OpenSettings_Click(object sender, RoutedEventArgs e)
+        {
+            var settings = new SettingsWindow();
+            settings.Owner = this;
+            settings.ShowDialog();
         }
     }
 
