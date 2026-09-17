@@ -8,46 +8,31 @@
         Foreground="{DynamicResource ForegroundBrush}">
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel Margin="20">
-            <TextBlock Text="Настройки" FontSize="18" FontWeight="Bold" 
-                       HorizontalAlignment="Center" Margin="0,0,0,15"/>
+            <TextBlock x:Name="HeaderText" FontSize="18" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,15"/>
 
-            <!-- Базовые настройки -->
-            <TextBlock Text="Тема:" FontSize="14" 
-                       HorizontalAlignment="Left" Margin="0,0,0,5"/>
-            <ComboBox x:Name="ThemeComboBox" Width="250" Margin="0,0,0,10" HorizontalAlignment="Left">
-                <ComboBoxItem Content="Светлая" Tag="0"/>
-                <ComboBoxItem Content="Тёмная" Tag="1"/>
-                <ComboBoxItem Content="Системная" Tag="2"/>
-                <ComboBoxItem Content="Неон" Tag="3"/>
-                <ComboBoxItem Content="Золотая" Tag="4"/>
-            </ComboBox>
+            <TextBlock x:Name="ThemeLabel" FontSize="14" HorizontalAlignment="Left" Margin="0,0,0,5"/>
+            <ComboBox x:Name="ThemeComboBox" Width="250" Margin="0,0,0,10" HorizontalAlignment="Left"/>
 
-            <TextBlock Text="Язык:" FontSize="14" 
-                       HorizontalAlignment="Left" Margin="0,0,0,5"/>
+            <TextBlock x:Name="LanguageLabel" FontSize="14" HorizontalAlignment="Left" Margin="0,0,0,5"/>
             <ComboBox x:Name="LanguageComboBox" Width="250" Margin="0,0,0,20" HorizontalAlignment="Left">
-                <ComboBoxItem Content="Русский" Tag="true"/>
-                <ComboBoxItem Content="Английский" Tag="false"/>
+                <ComboBoxItem Tag="true"/>
+                <ComboBoxItem Tag="false"/>
             </ComboBox>
 
             <Separator Margin="0,0,0,15"/>
 
-            <!-- Правила портов для программ -->
-            <TextBlock Text="Правила портов для программ" FontSize="16" FontWeight="Bold" 
-                       HorizontalAlignment="Center" Margin="0,0,0,10"/>
+            <TextBlock x:Name="PortRulesTitle" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,10"/>
 
-            <!-- Список программ -->
-            <TextBlock Text="Программы:" FontSize="14" Margin="0,0,0,5"/>
+            <TextBlock x:Name="ProgramsLabel" FontSize="14" Margin="0,0,0,5"/>
             <ListBox x:Name="ProgramsListBox" Width="250" Height="120" Margin="0,0,0,5"
                      HorizontalAlignment="Left" SelectionChanged="ProgramsListBox_SelectionChanged"/>
 
             <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
-                <TextBox x:Name="NewProgramTextBox" Width="170" Margin="0,0,5,0"
-                         ToolTip="Введите имя программы (например, chrome.exe)"/>
-                <Button Content="Добавить" Width="75" Margin="0,0,5,0" Click="AddProgram_Click"/>
-                <Button Content="Удалить" Width="75" Click="RemoveProgram_Click"/>
+                <TextBox x:Name="NewProgramTextBox" Width="170" Margin="0,0,5,0"/>
+                <Button x:Name="AddProgramButton" Width="75" Margin="0,0,5,0" Click="AddProgram_Click"/>
+                <Button x:Name="RemoveProgramButton" Width="75" Click="RemoveProgram_Click"/>
             </StackPanel>
 
-            <!-- Порты выбранной программы -->
             <Grid Margin="0,0,0,10">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -55,31 +40,27 @@
                 </Grid.ColumnDefinitions>
 
                 <StackPanel Grid.Column="0" Margin="0,0,10,0">
-                    <TextBlock Text="Разрешённые порты:" FontSize="13" Margin="0,0,0,5"/>
+                    <TextBlock x:Name="AllowedPortsLabel" FontSize="13" Margin="0,0,0,5"/>
                     <ListBox x:Name="AllowedPortsListBox" Height="100"/>
                 </StackPanel>
 
                 <StackPanel Grid.Column="1" Margin="10,0,0,0">
-                    <TextBlock Text="Запрещённые порты:" FontSize="13" Margin="0,0,0,5"/>
+                    <TextBlock x:Name="BlockedPortsLabel" FontSize="13" Margin="0,0,0,5"/>
                     <ListBox x:Name="BlockedPortsListBox" Height="100"/>
                 </StackPanel>
             </Grid>
 
-            <!-- Добавление порта -->
-            <TextBlock Text="Добавить / удалить порт:" FontSize="14" Margin="0,10,0,5"/>
+            <TextBlock x:Name="PortInputLabel" FontSize="14" Margin="0,10,0,5"/>
             <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
-                <TextBox x:Name="PortTextBox" Width="100" Margin="0,0,5,0"
-                         PreviewTextInput="PortTextBox_PreviewTextInput"
-                         ToolTip="Введите номер порта (1-65535)"/>
-                <Button Content="Разрешить" Width="90" Margin="0,0,5,0" Click="AllowPort_Click"/>
-                <Button Content="Запретить" Width="90" Margin="0,0,5,0" Click="BlockPort_Click"/>
-                <Button Content="Удалить" Width="75" Click="RemovePort_Click"/>
+                <TextBox x:Name="PortTextBox" Width="100" Margin="0,0,5,0" PreviewTextInput="PortTextBox_PreviewTextInput"/>
+                <Button x:Name="AllowPortButton" Width="90" Margin="0,0,5,0" Click="AllowPort_Click"/>
+                <Button x:Name="BlockPortButton" Width="90" Margin="0,0,5,0" Click="BlockPort_Click"/>
+                <Button x:Name="RemovePortButton" Width="75" Click="RemovePort_Click"/>
             </StackPanel>
 
             <Separator Margin="0,15,0,15"/>
 
-            <Button Content="Сохранить" Width="100" Height="30" 
-                    HorizontalAlignment="Center" Click="Save_Click"/>
+            <Button x:Name="SaveButton" Width="100" Height="30" HorizontalAlignment="Center" Click="Save_Click"/>
         </StackPanel>
     </ScrollViewer>
 </Window>

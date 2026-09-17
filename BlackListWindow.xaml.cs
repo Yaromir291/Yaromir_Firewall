@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Windows;
 using Microsoft.Win32;
 
@@ -11,17 +13,24 @@ namespace Yaromir_Firewall_FINAL1
         {
             InitializeComponent();
             _settings = SettingsManager.Instance;
+
+            Localization.LanguageChanged += OnLanguageChanged;
+
+            RefreshLocalization();
             RefreshList();
-            UpdateLanguageFromService();
         }
 
-        public void UpdateLanguageFromService()
+        private void OnLanguageChanged()
         {
-            var lang = LanguageService.Instance;
-            this.Title = lang.GetResource("BlackListWindow_Title");
-            AddButton.Content = lang.GetResource("BlackListWindow_AddButton");
-            RemoveButton.Content = lang.GetResource("BlackListWindow_RemoveButton");
-            ClearButton.Content = lang.GetResource("BlackListWindow_ClearButton");
+            Dispatcher.Invoke(RefreshLocalization);
+        }
+
+        private void RefreshLocalization()
+        {
+            Title = Localization.T("BlackList");
+            AddButton.Content = Localization.T("Add");
+            RemoveButton.Content = Localization.T("Remove");
+            ClearButton.Content = Localization.T("ClearAll");
         }
 
         private void RefreshList()
@@ -34,8 +43,8 @@ namespace Yaromir_Firewall_FINAL1
         private void Add_Click(object sender, RoutedEventArgs e)
         {
             var dialog = new OpenFileDialog();
-            dialog.Filter = "Исполняемые файлы (*.exe)|*.exe|Все файлы (*.*)|*.*";
-            dialog.Title = "Выберите программу для блокировки";
+            dialog.Filter = Localization.T("DialogExeFilter");
+            dialog.Title = Localization.T("DialogTitleBlack");
 
             if (dialog.ShowDialog(this) == true)
             {
@@ -44,7 +53,6 @@ namespace Yaromir_Firewall_FINAL1
 
                 if (!_settings.BlackList.Contains(name))
                 {
-                    // 🔥 КЛЮЧЕВОЕ ИСПРАВЛЕНИЕ: если программа была в белом списке — убираем оттуда
                     if (_settings.WhiteList.Contains(name))
                     {
                         _settings.WhiteList.Remove(name);
@@ -62,33 +70,35 @@ namespace Yaromir_Firewall_FINAL1
             if (ItemsList.SelectedItem != null)
             {
                 var name = ItemsList.SelectedItem.ToString();
-                
-                // 🔥 КЛЮЧЕВОЕ ИСПРАВЛЕНИЕ: полностью разблокируем с убийством процесса
-                if (!string.IsNullOrEmpty(name))
+                if (name != null)
                 {
                     FirewallService.Instance.UnblockProgram(name, killRunning: true);
+                    RefreshList();
                 }
-                
-                RefreshList();
             }
         }
 
         private void Clear_Click(object sender, RoutedEventArgs e)
         {
-            if (MessageBox.Show("Очистить весь чёрный список?", "Подтверждение",
+            if (MessageBox.Show(Localization.T("ConfirmClearBlack"), Localization.T("Confirmation"),
                 MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
             {
-                // 🔥 КЛЮЧЕВОЕ ИСПРАВЛЕНИЕ: разблокируем каждую программу перед очисткой
-                var toClear = new System.Collections.Generic.List<string>(_settings.BlackList);
+                var toClear = new List<string>(_settings.BlackList);
                 foreach (var name in toClear)
                 {
                     FirewallService.Instance.UnblockProgram(name, killRunning: true);
                 }
-                
+
                 _settings.BlackList.Clear();
                 _settings.Save();
                 RefreshList();
             }
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            Localization.LanguageChanged -= OnLanguageChanged;
+            base.OnClosed(e);
         }
     }
 }

@@ -8,24 +8,18 @@ namespace Yaromir_Firewall_FINAL1
     public partial class MainWindow : Window
     {
         private int _themeState = 2;
-        private bool _isRussian = true;
         private DispatcherTimer? _statusTimer;
 
-        /// <summary>
-        /// true — разрешить реальное закрытие окна (выход через трей).
-        /// false — крестик только сворачивает окно в трей.
-        /// </summary>
         public bool AllowExit { get; set; } = false;
 
         public MainWindow()
         {
             InitializeComponent();
 
-            // Язык берём из сохранённых настроек
-            _isRussian = SettingsManager.Instance.IsRussian;
+            Localization.LanguageChanged += OnLanguageChanged;
 
             ApplyTheme(SettingsManager.Instance.Theme);
-            UpdateLanguage();
+            RefreshLocalization();
 
             _statusTimer = new DispatcherTimer();
             _statusTimer.Interval = TimeSpan.FromSeconds(5);
@@ -33,7 +27,30 @@ namespace Yaromir_Firewall_FINAL1
             _statusTimer.Start();
         }
 
-        // Кнопка темы — переключает только Светлая/Тёмная/Системная
+        private void OnLanguageChanged()
+        {
+            Dispatcher.Invoke(RefreshLocalization);
+        }
+
+        private void RefreshLocalization()
+        {
+            bool ru = Localization.IsRussian;
+
+            ThemeButton.ToolTip = Localization.T("TooltipTheme");
+            LangButton.ToolTip = Localization.T("TooltipLang");
+            LangButton.Content = ru ? "🇷🇺" : "🇬🇧";
+            AboutButton.ToolTip = Localization.T("TooltipAbout");
+            SettingsButton.ToolTip = Localization.T("TooltipSettings");
+            AchievementsButton.ToolTip = Localization.T("TooltipAchievements");
+
+            OpenMonitorButton.Content = Localization.T("OpenMonitor");
+            WhiteListButton.Content = Localization.T("WhiteList");
+            BlackListButton.Content = Localization.T("BlackList");
+            LicenseLine.Text = Localization.T("LicenseLine");
+
+            UpdateStatus();
+        }
+
         private void ThemeButton_Click(object sender, RoutedEventArgs e)
         {
             int current = _themeState;
@@ -42,7 +59,6 @@ namespace Yaromir_Firewall_FINAL1
             ApplyTheme(_themeState);
         }
 
-        // ПУБЛИЧНЫЙ МЕТОД — доступен из SettingsWindow
         public void ApplyTheme(int state)
         {
             try
@@ -56,25 +72,38 @@ namespace Yaromir_Firewall_FINAL1
                     case 1: themeName = "DarkTheme"; iconText = "🌙"; break;
                     case 2:
                         themeName = SystemThemeHelper.GetSystemTheme() ? "LightTheme" : "DarkTheme";
-                        iconText = "🖥";
-                        break;
+                        iconText = "🖥"; break;
                     case 3: themeName = "NeonTheme"; iconText = "💡"; break;
                     case 4: themeName = "GoldTheme"; iconText = "⭐"; break;
                     default: themeName = "LightTheme"; iconText = "☀️"; break;
                 }
 
-                if (this.Resources[themeName] is ResourceDictionary themeDict)
-                {
-                    Application.Current.Resources.MergedDictionaries.Clear();
-                    Application.Current.Resources.MergedDictionaries.Add(themeDict);
+                ResourceDictionary? themeDict = null;
+                try { themeDict = Application.Current.FindResource(themeName) as ResourceDictionary; } catch { }
 
-                    this.Background = (System.Windows.Media.Brush)Application.Current.Resources["BackgroundBrush"];
+                if (themeDict != null)
+                {
+                    Application.Current.Resources.Remove("BackgroundImage");
+                    foreach (var key in themeDict.Keys)
+                    {
+                        Application.Current.Resources[key] = themeDict[key];
+                    }
                 }
 
-                if (state <= 2)
-                    ThemeButton.Content = iconText;
+                if (state == 0 || state == 1 || state == 2)
+                {
+                    var brush = Application.Current.Resources["BackgroundBrush"] as Brush;
+                    if (brush != null) this.Background = brush;
+                }
                 else
-                    ThemeButton.Content = "🖥";
+                {
+                    var img = Application.Current.Resources["BackgroundImage"] as ImageBrush;
+                    var brush = Application.Current.Resources["BackgroundBrush"] as Brush;
+                    this.Background = img ?? brush;
+                }
+
+                if (state <= 2) ThemeButton.Content = iconText;
+                else ThemeButton.Content = "🖥";
             }
             catch (Exception ex)
             {
@@ -84,35 +113,9 @@ namespace Yaromir_Firewall_FINAL1
 
         private void LangButton_Click(object sender, RoutedEventArgs e)
         {
-            _isRussian = !_isRussian;
-            // Сохраняем выбор языка, чтобы пережить перезапуск
-            SettingsManager.Instance.IsRussian = _isRussian;
+            Localization.SetLanguage(!Localization.IsRussian);
+            SettingsManager.Instance.IsRussian = Localization.IsRussian;
             SettingsManager.Instance.Save();
-            UpdateLanguage();
-        }
-
-        // ПУБЛИЧНЫЙ МЕТОД — доступен из SettingsWindow
-        public void SetLanguage(bool isRussian)
-        {
-            _isRussian = isRussian;
-            UpdateLanguage();
-        }
-
-        private void UpdateLanguage()
-        {
-            LangButton.Content = _isRussian ? "🇷🇺" : "🇬🇧";
-            LangButton.ToolTip = _isRussian ? "Русский" : "English";
-
-            OpenMonitorButton.Content = _isRussian ? "Открыть мониторинг" : "Open Monitor";
-            WhiteListButton.Content = _isRussian ? "Белый список" : "Whitelist";
-            BlackListButton.Content = _isRussian ? "Чёрный список" : "Blacklist";
-
-            UpdateStatus();
-        }
-
-        public void UpdateLanguageFromService()
-        {
-            UpdateLanguage();
         }
 
         private void UpdateStatus()
@@ -122,57 +125,55 @@ namespace Yaromir_Firewall_FINAL1
                 int blockRules = FirewallService.Instance.GetRuleCount();
                 int whiteListCount = SettingsManager.Instance.WhiteList.Count;
                 int total = blockRules + whiteListCount;
-
-                StatusText.Text = _isRussian ? $"Активно правил: {total}" : $"Active rules: {total}";
+                StatusText.Text = Localization.T("StatusRules", total);
             }
             catch
             {
-                StatusText.Text = _isRussian ? "Активно правил: 0" : "Active rules: 0";
+                StatusText.Text = Localization.T("StatusRules", 0);
             }
         }
 
         private void OpenMonitor_Click(object sender, RoutedEventArgs e)
         {
-            var monitor = new MonitorWindow();
-            monitor.Owner = this;
-            monitor.Show();
+            var w = new MonitorWindow { Owner = this };
+            w.Show();
         }
 
         private void OpenWhiteList_Click(object sender, RoutedEventArgs e)
         {
-            var wl = new WhiteListWindow();
-            wl.Owner = this;
-            wl.Show();
+            var w = new WhiteListWindow { Owner = this };
+            w.Show();
         }
 
         private void OpenBlackList_Click(object sender, RoutedEventArgs e)
         {
-            var bl = new BlackListWindow();
-            bl.Owner = this;
-            bl.Show();
+            var w = new BlackListWindow { Owner = this };
+            w.Show();
         }
 
-        // Крестик: не закрываем программу, а сворачиваем в трей
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (AllowExit) return; // выход через меню трея — закрываем по-настоящему
-
+            if (AllowExit) return;
             e.Cancel = true;
             Hide();
         }
 
         private void OpenAbout_Click(object sender, RoutedEventArgs e)
         {
-            var about = new AboutWindow();
-            about.Owner = this;
-            about.ShowDialog();
+            var w = new AboutWindow { Owner = this };
+            w.ShowDialog();
         }
 
         private void OpenSettings_Click(object sender, RoutedEventArgs e)
         {
-            var settings = new SettingsWindow();
-            settings.Owner = this;
-            settings.ShowDialog();
+            var w = new SettingsWindow { Owner = this };
+            w.ShowDialog();
+        }
+
+        private void OpenAchievements_Click(object sender, RoutedEventArgs e)
+        {
+            var w = new AchievementsWindow { Owner = this };
+            w.ShowDialog();
         }
     }
 
@@ -187,8 +188,7 @@ namespace Yaromir_Firewall_FINAL1
                     if (key != null)
                     {
                         var value = key.GetValue("AppsUseLightTheme");
-                        if (value != null)
-                            return Convert.ToInt32(value) == 1;
+                        if (value != null) return Convert.ToInt32(value) == 1;
                     }
                 }
             }

@@ -1,3 +1,4 @@
+using System;
 using System.Windows;
 
 namespace Yaromir_Firewall_FINAL1
@@ -17,20 +18,28 @@ namespace Yaromir_Firewall_FINAL1
         public PromptWindow(string programName, string programPath, string targetInfo)
         {
             InitializeComponent();
+
+            Localization.LanguageChanged += OnLanguageChanged;
+
             ProgramName.Text = programName;
             ProgramPath.Text = programPath;
             TargetInfo.Text = targetInfo;
-            UpdateLanguageFromService();
+
+            RefreshLocalization();
         }
 
-        public void UpdateLanguageFromService()
+        private void OnLanguageChanged()
         {
-            var lang = LanguageService.Instance;
-            this.Title = lang.GetResource("PromptWindow_Title");
-            AllowButton.Content = lang.GetResource("PromptWindow_AllowButton");
-            BlockButton.Content = lang.GetResource("PromptWindow_BlockButton");
-            BlockAndKillButton.Content = lang.GetResource("PromptWindow_BlockAndKillButton");
-            OnceCheckBox.Content = lang.GetResource("PromptWindow_OnceCheckBox");
+            Dispatcher.Invoke(RefreshLocalization);
+        }
+
+        private void RefreshLocalization()
+        {
+            Title = Localization.T("NewConnection");
+            AllowButton.Content = Localization.T("Allow");
+            BlockButton.Content = Localization.T("Block");
+            BlockAndKillButton.Content = Localization.T("BlockAndKill");
+            OnceCheckBox.Content = Localization.T("OnlyOnce");
         }
 
         private void Finish(PromptResult result)
@@ -44,5 +53,11 @@ namespace Yaromir_Firewall_FINAL1
         private void Allow_Click(object sender, RoutedEventArgs e) => Finish(PromptResult.Allow);
         private void Block_Click(object sender, RoutedEventArgs e) => Finish(PromptResult.Block);
         private void BlockAndKill_Click(object sender, RoutedEventArgs e) => Finish(PromptResult.BlockAndKill);
+
+        protected override void OnClosed(EventArgs e)
+        {
+            Localization.LanguageChanged -= OnLanguageChanged;
+            base.OnClosed(e);
+        }
     }
 }
