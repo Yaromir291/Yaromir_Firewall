@@ -14,33 +14,53 @@ namespace Yaromir_Firewall_FINAL1
         {
             InitializeComponent();
 
-            // Устанавливаем выбранный элемент по умолчанию (после инициализации)
-            RefreshRateCombo.SelectedIndex = 1; // "Умеренно (5 сек)"
+            Localization.LanguageChanged += OnLanguageChanged;
+
+            RefreshRateCombo.SelectedIndex = 1;
 
             _timer = new DispatcherTimer();
             _timer.Tick += (s, e) => RefreshData();
             _timer.Interval = TimeSpan.FromSeconds(_refreshSeconds);
             _timer.Start();
 
+            RefreshLocalization();
             RefreshData();
         }
 
-        public void UpdateLanguageFromService()
+        private void OnLanguageChanged()
         {
-            // Обновление текста для MonitorWindow
-            var lang = LanguageService.Instance;
-            this.Title = lang.GetResource("MonitorWindow_Title");
-            BackButton.ToolTip = lang.GetResource("MonitorWindow_BackButton_ToolTip");
-            RefreshRateLabel.Text = lang.GetResource("MonitorWindow_RefreshRateLabel");
-            
-            // Обновление заголовков колонок
-            if (ConnectionsGrid.Columns.Count >= 5)
+            Dispatcher.Invoke(() =>
             {
-                ConnectionsGrid.Columns[0].Header = lang.GetResource("MonitorWindow_Column_ProcessName");
-                ConnectionsGrid.Columns[1].Header = lang.GetResource("MonitorWindow_Column_PID");
-                ConnectionsGrid.Columns[2].Header = lang.GetResource("MonitorWindow_Column_LocalPort");
-                ConnectionsGrid.Columns[3].Header = lang.GetResource("MonitorWindow_Column_RemoteAddress");
-                ConnectionsGrid.Columns[4].Header = lang.GetResource("MonitorWindow_Column_Protocol");
+                RefreshLocalization();
+                RefreshRateComboItems();
+            });
+        }
+
+        private void RefreshLocalization()
+        {
+            Title = Localization.T("Monitoring");
+            BackButton.ToolTip = Localization.T("Back");
+            RefreshRateLabel.Text = Localization.T("RefreshRateLabel");
+
+            ColProcess.Header = Localization.T("ColProcess");
+            ColPid.Header = Localization.T("ColPid");
+            ColLocalPort.Header = Localization.T("ColLocalPort");
+            ColRemote.Header = Localization.T("ColRemote");
+            ColProtocol.Header = Localization.T("ColProtocol");
+            ColStatus.Header = Localization.T("ColStatus");
+
+            RefreshRateComboItems();
+        }
+
+        private void RefreshRateComboItems()
+        {
+            if (RefreshRateCombo.Items.Count >= 3)
+            {
+                int savedIndex = RefreshRateCombo.SelectedIndex;
+                ((ComboBoxItem)RefreshRateCombo.Items[0]).Content = Localization.T("RefreshFast");
+                ((ComboBoxItem)RefreshRateCombo.Items[1]).Content = Localization.T("RefreshModerate");
+                ((ComboBoxItem)RefreshRateCombo.Items[2]).Content = Localization.T("RefreshSlow");
+                RefreshRateCombo.SelectedIndex = savedIndex;
             }
         }
 
@@ -56,7 +76,6 @@ namespace Yaromir_Firewall_FINAL1
 
         private void RefreshRate_Changed(object sender, SelectionChangedEventArgs e)
         {
-            // Проверяем, что ComboBox и выбранный элемент существуют
             if (RefreshRateCombo == null || RefreshRateCombo.SelectedItem == null)
                 return;
 
@@ -79,6 +98,7 @@ namespace Yaromir_Firewall_FINAL1
         protected override void OnClosed(EventArgs e)
         {
             _timer?.Stop();
+            Localization.LanguageChanged -= OnLanguageChanged;
             base.OnClosed(e);
         }
     }

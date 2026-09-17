@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <None Remove="AboutWindow.xaml" />
+    <None Remove="AchievementsWindow.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -27,6 +28,8 @@
 
   <ItemGroup>
     <Resource Include="Resources\icon.ico" />
+    <Resource Include="Resources\bg_neon.jpg" />
+    <Resource Include="Resources\bg_gold.jpg" />
   </ItemGroup>
 
   <ItemGroup>
@@ -35,10 +38,13 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AboutWindow.xaml.cs" />
+    <Compile Include="AchievementsWindow.xaml.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Localization.cs" />
     <Page Include="AboutWindow.xaml" />
+    <Page Include="AchievementsWindow.xaml" />
 
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -97,7 +103,6 @@
     <Compile Include="Services\FirewallService.cs" />
     <Compile Include="Services\NetworkMonitor.cs" />
     <Compile Include="Services\SettingsManager.cs" />
-    <Compile Include="Services\LanguageService.cs" />
     <Compile Include="Models\ConnectionInfo.cs" />
     <Compile Include="Models\ProgramPortRule.cs" />
     <Compile Include="AssemblyInfo.cs" />

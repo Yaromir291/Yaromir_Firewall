@@ -1,3 +1,4 @@
+using System;
 using System.Windows;
 
 namespace Yaromir_Firewall_FINAL1
@@ -7,24 +8,35 @@ namespace Yaromir_Firewall_FINAL1
         public AboutWindow()
         {
             InitializeComponent();
-            UpdateLanguageFromService();
+
+            Localization.LanguageChanged += OnLanguageChanged;
+            RefreshLocalization();
         }
 
-        public void UpdateLanguageFromService()
+        private void OnLanguageChanged()
         {
-            var lang = LanguageService.Instance;
-            this.Title = lang.GetResource("AboutWindow_Title");
-            AppNameText.Text = lang.GetResource("AboutWindow_AppName");
-            VersionText.Text = lang.GetResource("AboutWindow_Version");
-            CopyrightText.Text = lang.GetResource("AboutWindow_Copyright");
-            LicenseInfoText.Text = lang.GetResource("AboutWindow_LicenseInfo");
-            TrademarkInfoText.Text = lang.GetResource("AboutWindow_TrademarkInfo");
-            CloseButton.Content = lang.GetResource("AboutWindow_CloseButton");
+            Dispatcher.Invoke(RefreshLocalization);
+        }
+
+        private void RefreshLocalization()
+        {
+            Title = Localization.T("About");
+            VersionText.Text = Localization.T("Version");
+            CopyrightText.Text = Localization.T("Copyright");
+            LicenseAboutText.Text = Localization.T("LicenseAbout");
+            TrademarkText.Text = Localization.T("Trademark");
+            CloseButton.Content = Localization.T("Close");
         }
 
         private void Close_Click(object sender, RoutedEventArgs e)
         {
             Close();
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            Localization.LanguageChanged -= OnLanguageChanged;
+            base.OnClosed(e);
         }
     }
 }
