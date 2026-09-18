@@ -114,7 +114,7 @@ namespace Yaromir_Firewall_FINAL1
 
             // ===== AboutWindow =====
             ["About"] = "О программе",
-            ["Version"] = "Версия 1.0.0",
+            ["Version"] = "Версия 2.0",
             ["Copyright"] = "© 2026 Яромир. Все права защищены.",
             ["LicenseAbout"] = "Исходный код доступен под лицензией Apache 2.0.",
             ["Trademark"] = "Логотип и название являются товарными знаками автора.",
@@ -212,7 +212,7 @@ namespace Yaromir_Firewall_FINAL1
 
             // ===== AboutWindow =====
             ["About"] = "About",
-            ["Version"] = "Version 1.0.0",
+            ["Version"] = "Version 2.0",
             ["Copyright"] = "© 2026 Yaromir. All rights reserved.",
             ["LicenseAbout"] = "Source code is available under the Apache 2.0 license.",
             ["Trademark"] = "Logo and name are trademarks of the author.",
