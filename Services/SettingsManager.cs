@@ -12,29 +12,29 @@ namespace Yaromir_Firewall_FINAL1
 
         private string _settingsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "settings.json");
 
+        /// <summary>Версия приложения, которая последний раз запускалась на этом ПК.</summary>
+        public string LastVersion { get; set; } = "";
+
         public int Theme { get; set; } = 2;
         public bool IsRussian { get; set; } = true;
         public List<string> WhiteList { get; set; } = new List<string>();
         public List<string> BlackList { get; set; } = new List<string>();
-        public int RefreshRate { get; set; } = 5;
-        public List<int> BlockedPorts { get; set; } = new List<int>();
         public List<ProgramPortRule> ProgramPortRules { get; set; } = new List<ProgramPortRule>();
 
         /// <summary>
         /// true, если приложение когда-либо запускалось версии 1.0 на этом компьютере.
-        /// Устанавливается один раз при первом запуске v1.0 и сохраняется во всех
-        /// последующих версиях (используется для золотой темы/ачивки в v2.0+).
+        /// Устанавливается ОДИН РАЗ в v1.0 и больше никогда не перезаписывается в true.
         /// </summary>
         public bool HadVersion1_0 { get; set; } = false;
 
-        /// <summary>
-        /// Индекс темы: 0=Light, 1=Dark, 2=System, 3=Gold, 4=Neon
-        /// </summary>
-        public int ThemeIndex { get; set; } = 2;
+        // Текущая версия этого билда. Меняй при выпуске новой версии.
+        private const string CurrentVersion = "2.0.0";
 
         public void Load()
         {
-            if (File.Exists(_settingsPath))
+            bool settingsExistedBefore = File.Exists(_settingsPath);
+
+            if (settingsExistedBefore)
             {
                 try
                 {
@@ -46,15 +46,24 @@ namespace Yaromir_Firewall_FINAL1
                         IsRussian = data.IsRussian;
                         WhiteList = data.WhiteList ?? new List<string>();
                         BlackList = data.BlackList ?? new List<string>();
-                        RefreshRate = data.RefreshRate;
-                        HadVersion1_0 = data.HadVersion1_0;
-                        BlockedPorts = data.BlockedPorts ?? new List<int>();
-                        ThemeIndex = data.ThemeIndex;
+                        HadVersion1_0 = data.HadVersion1_0;   // ← НЕ перезаписываем!
+                        LastVersion = data.LastVersion ?? "";
                         ProgramPortRules = data.ProgramPortRules ?? new List<ProgramPortRule>();
                     }
                 }
                 catch { }
             }
+            else
+            {
+                // 🔑 СВЕЖАЯ УСТАНОВКА: settings.json не существовал.
+                // Пользователь НЕ ветеран, даже если это v2.0.
+                HadVersion1_0 = false;
+            }
+
+            // Обновляем LastVersion до текущей версии (для будущих релизов)
+            LastVersion = CurrentVersion;
+
+            // Белый список по умолчанию (только при первой установке)
             if (WhiteList.Count == 0)
             {
                 WhiteList.AddRange(new[]
@@ -65,14 +74,6 @@ namespace Yaromir_Firewall_FINAL1
                     "csrss.exe", "dwm.exe", "explorer.exe", "taskhostw.exe",
                     "SearchApp.exe", "ShellExperienceHost.exe", "SystemSettings.exe"
                 });
-            }
-
-            // Эта сборка — v1.0: помечаем один раз и сохраняем, дальше флаг
-            // переживёт любые будущие обновления, потому что settings.json
-            // не входит в состав MSI-компонентов и не перезаписывается установщиком.
-            if (!HadVersion1_0)
-            {
-                HadVersion1_0 = true;
             }
 
             Save();
