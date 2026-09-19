@@ -1,4 +1,6 @@
 using System;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -16,7 +18,6 @@ namespace Yaromir_Firewall_FINAL1
 
             var settings = SettingsManager.Instance;
 
-            // Загружаем темы (с учётом флага HadVersion1_0)
             LoadThemeComboBoxItems();
 
             foreach (ComboBoxItem item in ThemeComboBox.Items)
@@ -51,8 +52,10 @@ namespace Yaromir_Firewall_FINAL1
         }
 
         /// <summary>
-        /// Загружает ComboBoxItem-ы тем с учётом HadVersion1_0.
-        /// Золотая тема (Tag=4) добавляется только если пользователь скачивал 1.0.
+        /// Загружает темы в ComboBox с учётом достижений:
+        /// - 0: Light, 1: Dark, 2: System, 3: Neon — доступны всегда
+        /// - 4: Gold — только если had_version_1_0 == true
+        /// - 5: Silver — только если had_version_2_0 == true
         /// </summary>
         private void LoadThemeComboBoxItems()
         {
@@ -63,28 +66,28 @@ namespace Yaromir_Firewall_FINAL1
             ThemeComboBox.Items.Add(new ComboBoxItem { Tag = "2" }); // System
             ThemeComboBox.Items.Add(new ComboBoxItem { Tag = "3" }); // Neon
 
-            // Золотая — только для тех, у кого есть флаг HadVersion1_0
-            if (SettingsManager.Instance.HadVersion1_0)
-            {
+            if (AchievementFlags.Get(AchievementFlags.Version1_0))
                 ThemeComboBox.Items.Add(new ComboBoxItem { Tag = "4" }); // Gold
-            }
+
+            if (AchievementFlags.Get(AchievementFlags.Version2_0))
+                ThemeComboBox.Items.Add(new ComboBoxItem { Tag = "5" }); // Silver
 
             RefreshComboBoxItems();
         }
 
         private void RefreshComboBoxItems()
         {
-            if (ThemeComboBox.Items.Count >= 4)
+            foreach (ComboBoxItem item in ThemeComboBox.Items)
             {
-                ((ComboBoxItem)ThemeComboBox.Items[0]).Content = Localization.T("ThemeLight");
-                ((ComboBoxItem)ThemeComboBox.Items[1]).Content = Localization.T("ThemeDark");
-                ((ComboBoxItem)ThemeComboBox.Items[2]).Content = Localization.T("ThemeSystem");
-                ((ComboBoxItem)ThemeComboBox.Items[3]).Content = Localization.T("ThemeNeon");
-            }
-
-            if (ThemeComboBox.Items.Count >= 5)
-            {
-                ((ComboBoxItem)ThemeComboBox.Items[4]).Content = Localization.T("ThemeGold");
+                switch (item.Tag?.ToString())
+                {
+                    case "0": item.Content = Localization.T("ThemeLight"); break;
+                    case "1": item.Content = Localization.T("ThemeDark"); break;
+                    case "2": item.Content = Localization.T("ThemeSystem"); break;
+                    case "3": item.Content = Localization.T("ThemeNeon"); break;
+                    case "4": item.Content = Localization.T("ThemeGold"); break;
+                    case "5": item.Content = Localization.T("ThemeSilver"); break;
+                }
             }
 
             if (LanguageComboBox.Items.Count >= 2)
@@ -111,6 +114,7 @@ namespace Yaromir_Firewall_FINAL1
             BlockPortButton.Content = Localization.T("Block");
             RemovePortButton.Content = Localization.T("Remove");
             SaveButton.Content = Localization.T("Save");
+            OpenLogButton.Content = Localization.T("OpenLog");
             NewProgramTextBox.ToolTip = Localization.T("NewProgramTooltip");
             PortTextBox.ToolTip = Localization.T("PortTooltip");
         }
@@ -123,7 +127,10 @@ namespace Yaromir_Firewall_FINAL1
                 ProgramsListBox.Items.Add(rule.ProgramName);
         }
 
-        private void ProgramsListBox_SelectionChanged(object sender, SelectionChangedEventArgs e) => RefreshPortsLists();
+        private void ProgramsListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            RefreshPortsLists();
+        }
 
         private void RefreshPortsLists()
         {
@@ -193,8 +200,15 @@ namespace Yaromir_Firewall_FINAL1
             }
         }
 
-        private void AllowPort_Click(object sender, RoutedEventArgs e) => AddPortToRule(true);
-        private void BlockPort_Click(object sender, RoutedEventArgs e) => AddPortToRule(false);
+        private void AllowPort_Click(object sender, RoutedEventArgs e)
+        {
+            AddPortToRule(true);
+        }
+
+        private void BlockPort_Click(object sender, RoutedEventArgs e)
+        {
+            AddPortToRule(false);
+        }
 
         private void AddPortToRule(bool allow)
         {
@@ -267,6 +281,34 @@ namespace Yaromir_Firewall_FINAL1
         private void PortTextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             e.Handled = !e.Text.All(char.IsDigit);
+        }
+
+        // ===== Открыть лог =====
+        private void OpenLog_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                string logPath = Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
+                    "Yaromir_Firewall",
+                    "firewall_log.txt");
+
+                if (!File.Exists(logPath))
+                {
+                    MessageBox.Show(Localization.T("LogNotFound"), Localization.T("Information"), MessageBoxButton.OK, MessageBoxImage.Information);
+                    return;
+                }
+
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = logPath,
+                    UseShellExecute = true
+                });
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, Localization.T("Error"), MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void Save_Click(object sender, RoutedEventArgs e)

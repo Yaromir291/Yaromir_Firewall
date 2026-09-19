@@ -47,6 +47,9 @@ namespace Yaromir_Firewall_FINAL1
             ["Veteran_Title"] = "Ветеран",
             ["Veteran_Description"] = "Вы скачали самую первую версию нашего проекта! Спасибо!",
             ["Veteran_Unlocked"] = "Разблокировано: Золотая тема",
+            ["Warrior_Title"] = "Опытный воин",
+            ["Warrior_Description"] = "Вы скачали версию 2.0 нашего проекта! Спасибо!",
+            ["Warrior_Unlocked"] = "Разблокировано: Серебряная тема",
             ["Close"] = "Закрыть",
 
             // ===== Трей =====
@@ -88,6 +91,7 @@ namespace Yaromir_Firewall_FINAL1
             ["ThemeSystem"] = "Системная",
             ["ThemeNeon"] = "Неон",
             ["ThemeGold"] = "Золотая",
+            ["ThemeSilver"] = "Серебряная",
             ["LanguageLabel"] = "Язык:",
             ["LangRussian"] = "Русский",
             ["LangEnglish"] = "Английский",
@@ -101,6 +105,8 @@ namespace Yaromir_Firewall_FINAL1
             ["Allow"] = "Разрешить",
             ["Block"] = "Запретить",
             ["Save"] = "Сохранить",
+            ["OpenLog"] = "Открыть лог",
+            ["LogNotFound"] = "Файл лога ещё не создан.",
             ["ErrEnterProgram"] = "Введите имя программы!",
             ["ErrProgramExists"] = "Такая программа уже есть в списке!",
             ["ErrSelectProgramRemove"] = "Выберите программу для удаления!",
@@ -114,7 +120,7 @@ namespace Yaromir_Firewall_FINAL1
 
             // ===== AboutWindow =====
             ["About"] = "О программе",
-            ["Version"] = "Версия 2.0",
+            ["Version"] = "Версия 2.0.0",
             ["Copyright"] = "© 2026 Яромир. Все права защищены.",
             ["LicenseAbout"] = "Исходный код доступен под лицензией Apache 2.0.",
             ["Trademark"] = "Логотип и название являются товарными знаками автора.",
@@ -145,6 +151,9 @@ namespace Yaromir_Firewall_FINAL1
             ["Veteran_Title"] = "Veteran",
             ["Veteran_Description"] = "You downloaded the very first version of our project! Thank you!",
             ["Veteran_Unlocked"] = "Unlocked: Gold theme",
+            ["Warrior_Title"] = "Experienced Warrior",
+            ["Warrior_Description"] = "You downloaded version 2.0 of our project! Thank you!",
+            ["Warrior_Unlocked"] = "Unlocked: Silver theme",
             ["Close"] = "Close",
 
             // ===== Трей =====
@@ -186,6 +195,7 @@ namespace Yaromir_Firewall_FINAL1
             ["ThemeSystem"] = "System",
             ["ThemeNeon"] = "Neon",
             ["ThemeGold"] = "Gold",
+            ["ThemeSilver"] = "Silver",
             ["LanguageLabel"] = "Language:",
             ["LangRussian"] = "Russian",
             ["LangEnglish"] = "English",
@@ -199,6 +209,8 @@ namespace Yaromir_Firewall_FINAL1
             ["Allow"] = "Allow",
             ["Block"] = "Block",
             ["Save"] = "Save",
+            ["OpenLog"] = "Open log",
+            ["LogNotFound"] = "The log file has not been created yet.",
             ["ErrEnterProgram"] = "Enter a program name!",
             ["ErrProgramExists"] = "This program is already in the list!",
             ["ErrSelectProgramRemove"] = "Select a program to remove!",
@@ -212,7 +224,7 @@ namespace Yaromir_Firewall_FINAL1
 
             // ===== AboutWindow =====
             ["About"] = "About",
-            ["Version"] = "Version 2.0",
+            ["Version"] = "Version 2.0.0",
             ["Copyright"] = "© 2026 Yaromir. All rights reserved.",
             ["LicenseAbout"] = "Source code is available under the Apache 2.0 license.",
             ["Trademark"] = "Logo and name are trademarks of the author.",

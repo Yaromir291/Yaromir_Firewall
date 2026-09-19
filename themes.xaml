@@ -39,4 +39,15 @@
         <SolidColorBrush x:Key="StatusBrush" Color="#FFE44D"/>
     </ResourceDictionary>
 
+    <!-- СЕРЕБРЯНАЯ ТЕМА (за v2.0) -->
+    <ResourceDictionary x:Key="SilverTheme">
+        <SolidColorBrush x:Key="BackgroundBrush" Color="#1A1A1A"/>
+        <ImageBrush x:Key="BackgroundImage" ImageSource="Resources/bg_silver.jpg" Stretch="UniformToFill"/>
+        <SolidColorBrush x:Key="ForegroundBrush" Color="#E8E8E8"/>
+        <SolidColorBrush x:Key="ButtonBackground" Color="#333333"/>
+        <SolidColorBrush x:Key="ButtonHover" Color="#4A4A4A"/>
+        <SolidColorBrush x:Key="BorderBrush" Color="#B0B0B0"/>
+        <SolidColorBrush x:Key="StatusBrush" Color="#C0C0C0"/>
+    </ResourceDictionary>
+
 </ResourceDictionary>

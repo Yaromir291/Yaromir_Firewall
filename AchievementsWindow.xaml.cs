@@ -24,20 +24,30 @@ namespace Yaromir_Firewall_FINAL1
             Title = Localization.T("Achievements");
             HeaderText.Text = Localization.T("Achievements");
             EmptyText.Text = Localization.T("InDevelopment");
+
             VeteranTitle.Text = Localization.T("Veteran_Title");
             VeteranDescription.Text = Localization.T("Veteran_Description");
             VeteranUnlocked.Text = Localization.T("Veteran_Unlocked");
 
-            // Показываем нужную панель в зависимости от флага
-            if (SettingsManager.Instance.HadVersion1_0)
+            WarriorTitle.Text = Localization.T("Warrior_Title");
+            WarriorDescription.Text = Localization.T("Warrior_Description");
+            WarriorUnlocked.Text = Localization.T("Warrior_Unlocked");
+
+            bool hasVeteran = AchievementFlags.Get(AchievementFlags.Version1_0);
+            bool hasWarrior = AchievementFlags.Get(AchievementFlags.Version2_0);
+
+            VeteranBorder.Visibility = hasVeteran ? Visibility.Visible : Visibility.Collapsed;
+            WarriorBorder.Visibility = hasWarrior ? Visibility.Visible : Visibility.Collapsed;
+
+            if (!hasVeteran && !hasWarrior)
             {
-                EmptyPanel.Visibility = Visibility.Collapsed;
-                VeteranPanel.Visibility = Visibility.Visible;
+                EmptyPanel.Visibility = Visibility.Visible;
+                AchievementsPanel.Visibility = Visibility.Collapsed;
             }
             else
             {
-                EmptyPanel.Visibility = Visibility.Visible;
-                VeteranPanel.Visibility = Visibility.Collapsed;
+                EmptyPanel.Visibility = Visibility.Collapsed;
+                AchievementsPanel.Visibility = Visibility.Visible;
             }
         }
 

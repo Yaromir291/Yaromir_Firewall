@@ -11,7 +11,11 @@ namespace Yaromir_Firewall_FINAL1
         private static FirewallService? _instance = null;
         public static FirewallService Instance => _instance ??= new FirewallService();
 
-        private static readonly string LogPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "firewall_log.txt");
+        // Лог: %ProgramData%\Yaromir_Firewall\firewall_log.txt
+        private static readonly string LogPath = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
+            "Yaromir_Firewall",
+            "firewall_log.txt");
 
         private bool _running = false;
         private Thread? _worker = null;
@@ -20,7 +24,11 @@ namespace Yaromir_Firewall_FINAL1
         {
             try
             {
-                File.AppendAllText(LogPath, $"{DateTime.Now:HH:mm:ss} {message}{Environment.NewLine}");
+                string folder = Path.GetDirectoryName(LogPath) ?? "";
+                if (!Directory.Exists(folder))
+                    Directory.CreateDirectory(folder);
+
+                File.AppendAllText(LogPath, $"{DateTime.Now:yyyy.MM.dd HH:mm} {message}{Environment.NewLine}");
             }
             catch { }
             Console.WriteLine(message);
@@ -36,9 +44,6 @@ namespace Yaromir_Firewall_FINAL1
 
             try
             {
-                // Сначала узкое разрешающее правило для локальной сети/точки доступа —
-                // оно более специфично, чем широкий блок ниже, и Windows Firewall
-                // применит именно его для трафика внутри локальной подсети.
                 RunNetsh("advfirewall firewall delete rule name=\"Allow_LocalSubnet_Inbound\"");
                 RunNetsh("advfirewall firewall add rule name=\"Allow_LocalSubnet_Inbound\" dir=in action=allow remoteip=localsubnet");
 
@@ -110,25 +115,18 @@ namespace Yaromir_Firewall_FINAL1
                 settings.Save();
             }
 
+            if (settings.WhiteList.Contains(exeName))
+            {
+                settings.WhiteList.Remove(exeName);
+                settings.Save();
+                Log($"[i] {exeName} удалён из белого списка (перемещён в чёрный).");
+            }
+
             AddBlockRuleInternal(exeName);
 
             if (killRunning)
             {
-                try
-                {
-                    var processes = Process.GetProcessesByName(Path.GetFileNameWithoutExtension(exeName));
-                    foreach (var proc in processes)
-                    {
-                        try
-                        {
-                            proc.Kill();
-                            proc.WaitForExit(2000);
-                            Log($"[+] Процесс {proc.ProcessName} (PID: {proc.Id}) завершён.");
-                        }
-                        catch { }
-                    }
-                }
-                catch { }
+                KillProcessesByName(exeName);
             }
         }
 
@@ -136,37 +134,52 @@ namespace Yaromir_Firewall_FINAL1
         {
             var settings = SettingsManager.Instance;
 
-            // Удаляем из чёрного списка
             if (settings.BlackList.Contains(exeName))
             {
                 settings.BlackList.Remove(exeName);
                 settings.Save();
             }
 
-            // Удаляем правило блокировки
             RemoveBlockRule(exeName);
 
-            // При необходимости убиваем процесс
             if (killRunning)
             {
-                try
-                {
-                    var processes = Process.GetProcessesByName(Path.GetFileNameWithoutExtension(exeName));
-                    foreach (var proc in processes)
-                    {
-                        try
-                        {
-                            proc.Kill();
-                            proc.WaitForExit(2000);
-                            Log($"[+] Процесс {proc.ProcessName} (PID: {proc.Id}) завершён.");
-                        }
-                        catch { }
-                    }
-                }
-                catch { }
+                KillProcessesByName(exeName);
             }
 
-            Log($"[+] {exeName} разблокирован.");
+            Log($"[+] {exeName} разблокирован (удалён из чёрного списка и правила firewall).");
+        }
+
+        public bool IsBlocked(string exeName)
+        {
+            var settings = SettingsManager.Instance;
+
+            if (settings.BlackList.Contains(exeName))
+                return true;
+
+            string ruleName = $"Block_{Path.GetFileNameWithoutExtension(exeName)}";
+            try
+            {
+                var psi = new ProcessStartInfo
+                {
+                    FileName = "netsh",
+                    Arguments = $"advfirewall firewall show rule name=\"{ruleName}\"",
+                    UseShellExecute = false,
+                    RedirectStandardOutput = true,
+                    CreateNoWindow = true
+                };
+                using (var p = Process.Start(psi))
+                using (var reader = p!.StandardOutput)
+                {
+                    string output = reader.ReadToEnd();
+                    return !output.Contains("Не найдено правил") &&
+                           !output.Contains("No rules found") &&
+                           !string.IsNullOrWhiteSpace(output);
+                }
+            }
+            catch { }
+
+            return false;
         }
 
         private void AddBlockRuleInternal(string exeName)
@@ -356,6 +369,25 @@ namespace Yaromir_Firewall_FINAL1
             }
         }
 
+        private void KillProcessesByName(string exeName)
+        {
+            try
+            {
+                var processes = Process.GetProcessesByName(Path.GetFileNameWithoutExtension(exeName));
+                foreach (var proc in processes)
+                {
+                    try
+                    {
+                        proc.Kill();
+                        proc.WaitForExit(2000);
+                        Log($"[+] Процесс {proc.ProcessName} (PID: {proc.Id}) завершён.");
+                    }
+                    catch { }
+                }
+            }
+            catch { }
+        }
+
         public void KillProcess(int pid)
         {
             try
@@ -366,10 +398,6 @@ namespace Yaromir_Firewall_FINAL1
             catch { }
         }
 
-        /// <summary>
-        /// Считает активные правила, созданные приложением: все Block_* (включая
-        /// глобальный Block_All_Inbound) плюс правило локального исключения.
-        /// </summary>
         public int GetRuleCount()
         {
             try
