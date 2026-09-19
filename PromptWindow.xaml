@@ -17,16 +17,34 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <TextBlock x:Name="ProgramName" FontSize="18" FontWeight="Bold" Grid.Row="0"/>
-        <TextBlock x:Name="ProgramPath" FontSize="12" Foreground="Gray" Grid.Row="1" Margin="0,0,0,10"/>
-        <TextBlock x:Name="TargetInfo" FontSize="13" Grid.Row="2" Margin="0,0,0,15"/>
+        <TextBlock x:Name="ProgramName" FontSize="18" FontWeight="Bold"
+                   Foreground="{DynamicResource ForegroundBrush}"
+                   Grid.Row="0"/>
+
+        <TextBlock x:Name="ProgramPath" FontSize="12" Foreground="Gray"
+                   Grid.Row="1" Margin="0,0,0,10"/>
+
+        <TextBlock x:Name="TargetInfo" FontSize="13"
+                   Foreground="{DynamicResource ForegroundBrush}"
+                   Grid.Row="2" Margin="0,0,0,15"/>
 
         <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,10">
-            <Button x:Name="AllowButton" Width="90" Margin="5" Click="Allow_Click" Background="#4CAF50" Foreground="White"/>
-            <Button x:Name="BlockButton" Width="90" Margin="5" Click="Block_Click" Background="#F44336" Foreground="White"/>
-            <Button x:Name="BlockAndKillButton" Width="150" Margin="5" Click="BlockAndKill_Click" Background="#D32F2F" Foreground="White"/>
+            <Button x:Name="AllowButton" Width="90" Margin="5" Click="Allow_Click"
+                    Background="#4CAF50" Foreground="White"/>
+
+            <Button x:Name="BlockButton" Width="90" Margin="5" Click="Block_Click"
+                    Background="#F44336" Foreground="White"/>
+
+            <Button x:Name="BlockAndKillButton" Width="150" Margin="5" Click="BlockAndKill_Click"
+                    Background="#D32F2F" Foreground="White"/>
         </StackPanel>
 
-        <CheckBox x:Name="OnceCheckBox" Grid.Row="4" IsChecked="True" Margin="0,0,0,5" HorizontalAlignment="Center"/>
+        <!-- Чекбокс: текст привязан к цвету темы, галочка по умолчанию СНЯТА -->
+        <CheckBox x:Name="OnceCheckBox"
+                  Grid.Row="4"
+                  IsChecked="False"
+                  Foreground="{DynamicResource ForegroundBrush}"
+                  Margin="0,0,0,5"
+                  HorizontalAlignment="Center"/>
     </Grid>
 </Window>

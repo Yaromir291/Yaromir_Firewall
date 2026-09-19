@@ -75,6 +75,7 @@ namespace Yaromir_Firewall_FINAL1
                         iconText = "🖥"; break;
                     case 3: themeName = "NeonTheme"; iconText = "💡"; break;
                     case 4: themeName = "GoldTheme"; iconText = "⭐"; break;
+                    case 5: themeName = "SilverTheme"; iconText = "🥈"; break;
                     default: themeName = "LightTheme"; iconText = "☀️"; break;
                 }
 

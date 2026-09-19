@@ -18,6 +18,7 @@
   <ItemGroup>
     <None Remove="AboutWindow.xaml" />
     <None Remove="AchievementsWindow.xaml" />
+    <None Remove="Resources\bg_silver.jpg" />
   </ItemGroup>
 
   <ItemGroup>
@@ -27,6 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Resources\bg_silver.jpg" />
     <Resource Include="Resources\icon.ico" />
     <Resource Include="Resources\bg_neon.jpg" />
     <Resource Include="Resources\bg_gold.jpg" />
@@ -38,6 +40,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AboutWindow.xaml.cs" />
+    <Compile Include="AchievementFlags.cs" />
     <Compile Include="AchievementsWindow.xaml.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
