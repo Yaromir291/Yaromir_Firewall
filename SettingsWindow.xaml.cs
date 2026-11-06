@@ -38,6 +38,9 @@ namespace Yaromir_Firewall_FINAL1
                 }
             }
 
+            // Автозагрузка: показываем фактическое сохранённое значение
+            AutoStartCheckBox.IsChecked = settings.AutoStart;
+
             RefreshProgramsList();
             RefreshLocalization();
         }
@@ -103,6 +106,8 @@ namespace Yaromir_Firewall_FINAL1
             HeaderText.Text = Localization.T("Settings");
             ThemeLabel.Text = Localization.T("ThemeLabel");
             LanguageLabel.Text = Localization.T("LanguageLabel");
+            AutoStartCheckBox.Content = Localization.T("AutoStartLabel");
+            AutoStartCheckBox.ToolTip = Localization.T("AutoStartTooltip");
             PortRulesTitle.Text = Localization.T("PortRulesTitle");
             ProgramsLabel.Text = Localization.T("ProgramsLabel");
             AllowedPortsLabel.Text = Localization.T("AllowedPortsLabel");
@@ -323,7 +328,18 @@ namespace Yaromir_Firewall_FINAL1
                 if (bool.TryParse(langItem.Tag?.ToString(), out bool langValue))
                     settings.IsRussian = langValue;
 
+            // Автозагрузку меняем в системе только если пользователь реально переключил чекбокс
+            bool wantAutoStart = AutoStartCheckBox.IsChecked == true;
+            bool autoStartChanged = wantAutoStart != settings.AutoStart;
+            settings.AutoStart = wantAutoStart;
+
             settings.Save();
+
+            // schtasks — отдельный процесс, на UI-потоке его ждать незачем.
+            // Если операция не успеет завершиться, Apply() отработает при следующем
+            // старте (App.OnStartup зовёт его каждый раз) — состояние само выровняется.
+            if (autoStartChanged)
+                System.Threading.Tasks.Task.Run(() => AutostartManager.Apply(settings.AutoStart));
 
             Localization.SetLanguage(settings.IsRussian);
 

@@ -1,6 +1,5 @@
 using System;
 using System.Windows;
-using Microsoft.Win32;
 
 namespace Yaromir_Firewall_FINAL1
 {
@@ -35,56 +34,88 @@ namespace Yaromir_Firewall_FINAL1
         private void RefreshList()
         {
             ItemsList.Items.Clear();
-            foreach (var item in _settings.WhiteList)
+            foreach (var item in _settings.WhiteListCopy())
                 ItemsList.Items.Add(item);
         }
 
-        private void Add_Click(object sender, RoutedEventArgs e)
+        private async void Add_Click(object sender, RoutedEventArgs e)
         {
-            var dialog = new OpenFileDialog();
-            dialog.Filter = Localization.T("DialogExeFilter");
-            dialog.Title = Localization.T("DialogTitleWhite");
-
-            if (dialog.ShowDialog(this) == true)
+            var dialog = new Microsoft.Win32.OpenFileDialog
             {
-                var name = System.IO.Path.GetFileName(dialog.FileName);
-                if (!_settings.WhiteList.Contains(name))
-                {
-                    if (_settings.BlackList.Contains(name))
-                    {
-                        FirewallService.Instance.UnblockProgram(name, killRunning: false);
-                    }
+                Filter = Localization.T("DialogExeFilter"),
+                Title = Localization.T("DialogTitleWhite")
+            };
 
-                    _settings.WhiteList.Add(name);
-                    _settings.Save();
-                    RefreshList();
+            if (dialog.ShowDialog(this) != true)
+                return;
+
+            string name = System.IO.Path.GetFileName(dialog.FileName);
+
+            if (_settings.IsWhiteListed(name))
+                return;
+
+            AddButton.IsEnabled = false;
+            try
+            {
+                // Если программа была в чёрном списке — снимаем её правила.
+                // Await обязателен: раньше UnblockProgram вызывался синхронно и
+                // подвешивал окно на время работы netsh.
+                if (_settings.IsBlackListed(name))
+                {
+                    var result = await FirewallService.Instance.UnblockProgramAsync(name, killRunning: false);
+                    if (!result.Ok)
+                        ShowRuleError(name, result.FailText);
                 }
+
+                _settings.AddToWhiteList(name);
+            }
+            catch (Exception ex)
+            {
+                AppLog.Error($"Добавление {name} в белый список", ex);
+                ShowRuleError(name, ex.Message);
+            }
+            finally
+            {
+                AddButton.IsEnabled = true;
+                RefreshList();
             }
         }
 
         private void Remove_Click(object sender, RoutedEventArgs e)
         {
-            if (ItemsList.SelectedItem != null)
-            {
-                var name = ItemsList.SelectedItem.ToString();
-                if (name != null)
-                {
-                    _settings.WhiteList.Remove(name);
-                    _settings.Save();
-                    RefreshList();
-                }
-            }
+            string? name = ItemsList.SelectedItem?.ToString();
+            if (name == null)
+                return;
+
+            _settings.RemoveFromWhiteList(name);
+            RefreshList();
         }
 
         private void Clear_Click(object sender, RoutedEventArgs e)
         {
             if (MessageBox.Show(Localization.T("ConfirmClearWhite"), Localization.T("Confirmation"),
-                MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                MessageBoxButton.YesNo, MessageBoxImage.Question) != MessageBoxResult.Yes)
+                return;
+
+            try
             {
-                _settings.WhiteList.Clear();
-                _settings.Save();
+                _settings.ClearWhiteList();
+            }
+            catch (Exception ex)
+            {
+                AppLog.Error("Очистка белого списка", ex);
+                ShowRuleError("", ex.Message);
+            }
+            finally
+            {
                 RefreshList();
             }
+        }
+
+        private void ShowRuleError(string name, string reason)
+        {
+            MessageBox.Show(this, Localization.T("RuleApplyFailed", name, reason),
+                Localization.T("Error"), MessageBoxButton.OK, MessageBoxImage.Warning);
         }
 
         protected override void OnClosed(EventArgs e)

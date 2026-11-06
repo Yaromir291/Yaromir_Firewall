@@ -93,6 +93,10 @@ namespace Yaromir_Firewall_FINAL1
             ["ThemeGold"] = "Золотая",
             ["ThemeSilver"] = "Серебряная",
             ["LanguageLabel"] = "Язык:",
+            ["AutoStartLabel"] = "Запускать вместе с Windows",
+            ["AutoStartTooltip"] = "Программа будет запускаться при входе в систему без окна UAC.\nОтключи, если хочешь запускать её вручную.",
+            ["RuleApplyFailed"] = "Не удалось применить правило файрвола для \"{0}\".\n\nПричина: {1}\n\nПодробности — в логе (кнопка «Открыть лог» в настройках).",
+            ["PartialFailure"] = "Готово, но для {0} элемент(ов) правила снять не удалось. Подробности — в логе.",
             ["LangRussian"] = "Русский",
             ["LangEnglish"] = "Английский",
             ["PortRulesTitle"] = "Правила портов для программ",
@@ -120,7 +124,7 @@ namespace Yaromir_Firewall_FINAL1
 
             // ===== AboutWindow =====
             ["About"] = "О программе",
-            ["Version"] = "Версия 2.0.0",
+            ["Version"] = "Версия {0}",
             ["Copyright"] = "© 2026 Яромир. Все права защищены.",
             ["LicenseAbout"] = "Исходный код доступен под лицензией Apache 2.0.",
             ["Trademark"] = "Логотип и название являются товарными знаками автора.",
@@ -197,6 +201,10 @@ namespace Yaromir_Firewall_FINAL1
             ["ThemeGold"] = "Gold",
             ["ThemeSilver"] = "Silver",
             ["LanguageLabel"] = "Language:",
+            ["AutoStartLabel"] = "Start with Windows",
+            ["AutoStartTooltip"] = "The app will start at logon without a UAC prompt.\nUncheck it if you prefer to start it manually.",
+            ["RuleApplyFailed"] = "Failed to apply the firewall rule for \"{0}\".\n\nReason: {1}\n\nSee the log for details (\"Open log\" button in Settings).",
+            ["PartialFailure"] = "Done, but rules could not be removed for {0} item(s). See the log for details.",
             ["LangRussian"] = "Russian",
             ["LangEnglish"] = "English",
             ["PortRulesTitle"] = "Port rules for programs",
@@ -224,7 +232,7 @@ namespace Yaromir_Firewall_FINAL1
 
             // ===== AboutWindow =====
             ["About"] = "About",
-            ["Version"] = "Version 2.0.0",
+            ["Version"] = "Version {0}",
             ["Copyright"] = "© 2026 Yaromir. All rights reserved.",
             ["LicenseAbout"] = "Source code is available under the Apache 2.0 license.",
             ["Trademark"] = "Logo and name are trademarks of the author.",

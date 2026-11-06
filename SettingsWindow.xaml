@@ -19,6 +19,11 @@
                 <ComboBoxItem Tag="false"/>
             </ComboBox>
 
+            <!-- Автозагрузка. Раньше прописывалась в реестр насильно при каждом старте
+                 и не отключалась нигде в интерфейсе. -->
+            <CheckBox x:Name="AutoStartCheckBox" Margin="0,0,0,20" HorizontalAlignment="Left"
+                      FontSize="14" Foreground="{DynamicResource ForegroundBrush}"/>
+
             <Separator Margin="0,0,0,15"/>
 
             <TextBlock x:Name="PortRulesTitle" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,10"/>

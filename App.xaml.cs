@@ -15,11 +15,29 @@ namespace Yaromir_Firewall_FINAL1
         {
             base.OnStartup(e);
 
-            if (System.Diagnostics.Process.GetProcessesByName("Yaromir_Firewall_FINAL1").Length > 1)
+            // БЫЛО: GetProcessesByName("Yaromir_Firewall_FINAL1") — жёстко зашитое имя.
+            // Переименуй .exe (или собери под другим именем) — и проверка перестанет
+            // работать, разрешая два экземпляра, которые начнут драться за правила firewall.
+            using (var self = System.Diagnostics.Process.GetCurrentProcess())
             {
-                MessageBox.Show(Localization.T("AlreadyRunning"), "Yaromir_Firewall_FINAL1", MessageBoxButton.OK, MessageBoxImage.Information);
-                Shutdown();
-                return;
+                int selfId = self.Id;
+                string selfName = self.ProcessName;
+
+                bool alreadyRunning = false;
+                foreach (var other in System.Diagnostics.Process.GetProcessesByName(selfName))
+                {
+                    using (other)
+                    {
+                        if (other.Id != selfId) { alreadyRunning = true; break; }
+                    }
+                }
+
+                if (alreadyRunning)
+                {
+                    MessageBox.Show(Localization.T("AlreadyRunning"), "Yaromir Firewall", MessageBoxButton.OK, MessageBoxImage.Information);
+                    Shutdown();
+                    return;
+                }
             }
 
             SettingsManager.Instance.Load();
@@ -30,12 +48,25 @@ namespace Yaromir_Firewall_FINAL1
 
             _notifyIcon = new TaskbarIcon();
 
-            if (System.IO.File.Exists(iconPath))
-                _notifyIcon.Icon = new System.Drawing.Icon(iconPath);
-            else
-                _notifyIcon.Icon = System.Drawing.Icon.ExtractAssociatedIcon(
-                    System.Diagnostics.Process.GetCurrentProcess().MainModule?.FileName ?? "shell32.dll"
-                );
+            try
+            {
+                if (System.IO.File.Exists(iconPath))
+                {
+                    _notifyIcon.Icon = new System.Drawing.Icon(iconPath);
+                }
+                else
+                {
+                    string exePath;
+                    using (var self = System.Diagnostics.Process.GetCurrentProcess())
+                        exePath = self.MainModule?.FileName ?? "shell32.dll";
+
+                    _notifyIcon.Icon = System.Drawing.Icon.ExtractAssociatedIcon(exePath);
+                }
+            }
+            catch (Exception ex)
+            {
+                AppLog.Error("Иконка в трее", ex);
+            }
 
             _notifyIcon.ContextMenu = new System.Windows.Controls.ContextMenu();
 
@@ -58,18 +89,20 @@ namespace Yaromir_Firewall_FINAL1
             Localization.LanguageChanged += RefreshTrayLocalization;
             RefreshTrayLocalization();
 
-            try
-            {
-                using (var key = Registry.CurrentUser.OpenSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Run", true))
-                {
-                    if (key?.GetValue("Yaromir_Firewall_FINAL1") == null)
-                        key?.SetValue("Yaromir_Firewall_FINAL1", System.Diagnostics.Process.GetCurrentProcess().MainModule?.FileName ?? "Yaromir_Firewall_FINAL1.exe");
-                }
-            }
-            catch { }
+            // БЫЛО: значение в HKCU\...\Run записывалось безусловно при каждом старте,
+            // а DeleteValue не встречался во всём проекте — отключить автозагрузку было
+            // невозможно даже через удаление программы. Плюс ключ Run запускает процесс
+            // БЕЗ повышения, а у нас requireAdministrator → UAC при каждом входе.
+            //
+            // СТАЛО: AutostartManager ставит задачу Планировщика с /RL HIGHEST
+            // (стартует без запроса UAC) и умеет всё это снимать. Уважает настройку пользователя.
+            // В фоне: schtasks.exe — отдельный процесс, незачем тормозить им запуск окна.
+            System.Threading.Tasks.Task.Run(() => AutostartManager.Apply(SettingsManager.Instance.AutoStart));
 
             FirewallService.Instance.Start();
             NetworkMonitor.Instance.Start();
+
+            AppLog.Ok($"Запуск Yaromir Firewall {SettingsManager.Instance.LastVersion}.");
         }
 
         private void RefreshTrayLocalization()
@@ -82,10 +115,23 @@ namespace Yaromir_Firewall_FINAL1
 
         protected override void OnExit(ExitEventArgs e)
         {
-            Localization.LanguageChanged -= RefreshTrayLocalization;
-            _notifyIcon?.Dispose();
-            FirewallService.Instance.Stop();
-            NetworkMonitor.Instance.Stop();
+            // Порядок важен: сначала снимаем правила (пока процесс ещё жив и у нас есть
+            // права администратора), потом гасим трей. Если исключение в одном шаге
+            // прервёт остальные, пользователь останется с заблокированным интернетом.
+            try { NetworkMonitor.Instance.Stop(); }
+            catch (Exception ex) { AppLog.Error("Остановка мониторинга", ex); }
+
+            try { FirewallService.Instance.Stop(); }
+            catch (Exception ex) { AppLog.Error("Снятие правил firewall", ex); }
+
+            try
+            {
+                Localization.LanguageChanged -= RefreshTrayLocalization;
+                _notifyIcon?.Dispose();
+            }
+            catch (Exception ex) { AppLog.Error("Закрытие трея", ex); }
+
+            AppLog.Ok("Приложение завершено.");
             base.OnExit(e);
         }
     }

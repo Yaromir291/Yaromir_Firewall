@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Threading;
@@ -7,7 +8,7 @@ namespace Yaromir_Firewall_FINAL1
 {
     public partial class MainWindow : Window
     {
-        private int _themeState = 2;
+        private int _themeState;
         private DispatcherTimer? _statusTimer;
 
         public bool AllowExit { get; set; } = false;
@@ -18,7 +19,8 @@ namespace Yaromir_Firewall_FINAL1
 
             Localization.LanguageChanged += OnLanguageChanged;
 
-            ApplyTheme(SettingsManager.Instance.Theme);
+            _themeState = SettingsManager.Instance.Theme;
+            ApplyTheme(_themeState);
             RefreshLocalization();
 
             _statusTimer = new DispatcherTimer();
@@ -51,12 +53,42 @@ namespace Yaromir_Firewall_FINAL1
             UpdateStatus();
         }
 
+        /// <summary>
+        /// Переключает тему по кругу И СОХРАНЯЕТ выбор.
+        ///
+        /// БЫЛО: тема применялась только к открытому окну и не записывалась в настройки —
+        /// после перезапуска всё откатывалось. Хуже того, если пользователь выбрал в
+        /// настройках Gold/Silver/Neon, первое же нажатие на кнопку сбрасывало его на
+        /// Light: цикл был жёстко зашит на (0,1,2), а разблокированные темы в него
+        /// не входили.
+        /// </summary>
         private void ThemeButton_Click(object sender, RoutedEventArgs e)
         {
-            int current = _themeState;
-            if (current > 2) current = 0;
-            _themeState = (current + 1) % 3;
+            var available = AvailableThemes();
+
+            int index = available.IndexOf(_themeState);
+            if (index < 0) index = -1;          // тема недоступна (например, достижения сброшены)
+
+            _themeState = available[(index + 1) % available.Count];
             ApplyTheme(_themeState);
+
+            var settings = SettingsManager.Instance;
+            settings.Theme = _themeState;
+            settings.Save();
+        }
+
+        /// <summary>
+        /// Темы, доступные пользователю: базовые + разблокированные достижениями.
+        /// Список совпадает с тем, что показывает SettingsWindow.LoadThemeComboBoxItems.
+        /// </summary>
+        private static List<int> AvailableThemes()
+        {
+            var list = new List<int> { 0, 1, 2, 3 };   // Light, Dark, System, Neon
+
+            if (AchievementFlags.Get(AchievementFlags.Version1_0)) list.Add(4);   // Gold
+            if (AchievementFlags.Get(AchievementFlags.Version2_0)) list.Add(5);   // Silver
+
+            return list;
         }
 
         public void ApplyTheme(int state)
@@ -108,7 +140,9 @@ namespace Yaromir_Firewall_FINAL1
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"Ошибка темы: {ex.Message}");
+                // Debug.WriteLine в релизной сборке не виден никому — ошибка темы
+                // исчезала бесследно. Теперь она попадает в общий лог.
+                AppLog.Error("Применение темы", ex);
             }
         }
 

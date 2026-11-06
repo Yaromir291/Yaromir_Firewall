@@ -5,6 +5,14 @@ namespace Yaromir_Firewall_FINAL1
 {
     public enum PromptResult
     {
+        /// <summary>
+        /// Пользователь НЕ принял решение (закрыл окно крестиком / Alt+F4).
+        ///
+        /// БЫЛО: значение по умолчанию было Block. Закрытие окна крестиком молча
+        /// отправляло программу в чёрный список НАВСЕГДА — без единого слова в логе.
+        /// Теперь «закрыл окно» != «заблокируй».
+        /// </summary>
+        None,
         Allow,
         Block,
         BlockAndKill
@@ -12,7 +20,7 @@ namespace Yaromir_Firewall_FINAL1
 
     public partial class PromptWindow : Window
     {
-        public PromptResult Result { get; private set; } = PromptResult.Block;
+        public PromptResult Result { get; private set; } = PromptResult.None;
         public bool OnlyOnce { get; private set; } = true;
 
         public PromptWindow(string programName, string programPath, string targetInfo)

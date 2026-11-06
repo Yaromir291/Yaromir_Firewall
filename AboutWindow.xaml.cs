@@ -21,7 +21,7 @@ namespace Yaromir_Firewall_FINAL1
         private void RefreshLocalization()
         {
             Title = Localization.T("About");
-            VersionText.Text = Localization.T("Version");
+            VersionText.Text = Localization.T("Version", SettingsManager.CurrentVersion);
             CopyrightText.Text = Localization.T("Copyright");
             LicenseAboutText.Text = Localization.T("LicenseAbout");
             TrademarkText.Text = Localization.T("Trademark");

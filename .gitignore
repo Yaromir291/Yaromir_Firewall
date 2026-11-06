@@ -51,3 +51,6 @@ target/
 .DS_Store
 Thumbs.db
 ```
+# Артефакты сборки
+bin/
+obj/
